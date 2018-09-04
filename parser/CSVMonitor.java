@@ -65,6 +65,36 @@ public class CSVMonitor {
 	public List<Pair> getData(){
 		return Data;
 	}
+
+	//////////////////////////////////////////////////////////////////
+	
+	public Pair getPairFromTime(LocalDateTime soughtTime) {
+	
+		//iterate through list looking for a specific time (assuming chronological entry)
+		for(int i = 0 ; i < Data.size(); i ++) {
+			
+			//if the current checked time is before what you are looking for, keep searching
+		if(Data.get(i).getDateTime().isBefore(soughtTime)) {
+			continue;
+		}
+		
+		//if the current checked time is what you are looking for, return it
+		else if(Data.get(i).getDateTime().isEqual(soughtTime)) {
+			return Data.get(i);
+		}
+		
+		//if the current checked and the previously checked times "flank" the time you are looking for, return an averaged temperature pair
+		else if(Data.get(i - 1).getDateTime().isBefore(soughtTime) && Data.get(i).getDateTime().isAfter(soughtTime)) {
+			return new Pair(soughtTime, (Data.get(i-1).getTemp() + Data.get(i).getTemp())/2);
+		}
+	}
+	
+		//if the time did not work
+	return null;
+	}
+	
+	/////////////////////////////////////////////////////////////////////	
+	
 	
 }
 
