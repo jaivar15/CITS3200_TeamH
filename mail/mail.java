@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * This file is used for send mail when we called.
  *
  * @author (CITS3200 Team H)
- * @version (1)
+ * @version (1.1)
  */
 public class mail
 {
@@ -67,13 +67,13 @@ public class mail
         props.setProperty("mail.smtp.socketFactory.port", smtpPort);
     }
     
-    public void sent(Properties props) throws Exception{
+    public void sent(Properties props, MimeMultipart MBP) throws Exception{
         // Create a session object based on the configuration to interact with the mail server
         Session session = Session.getInstance(props);
         session.setDebug(true);                                 // activate debug mode, get some infromation log
 
         // create a mail, some text 
-        MimeMessage message = createMessage(session, senderEmailAccount);
+        MimeMessage message = createMessage(session, senderEmailAccount,MBP);
 
         // Get the transfer object according to the Session
         Transport transport = session.getTransport();
@@ -83,12 +83,12 @@ public class mail
 
         // send message
         transport.sendMessage(message, message.getAllRecipients());
-
+        
         // close connection
         transport.close();
     }
     
-    public MimeMessage createMessage(Session session,String sendMail)throws Exception{
+    public MimeMessage createMessage(Session session,String sendMail,MimeMultipart MBP)throws Exception{
         // 1. create a mail
         MimeMessage message = new MimeMessage(session);
         // 2. sender: avoid scam name
@@ -97,10 +97,10 @@ public class mail
         message.setRecipients(MimeMessage.RecipientType.TO, recipientAddress);
         
          // 4. Subject: care scam subject, mail will block it
-        message.setSubject("EVENT IN FRIDAY", "UTF-8");
+        message.setSubject("testing", "UTF-8");
 
         // 5. Content: avoid scam content
-        message.setContent("test mail----------------- good if received", "text/html;charset=UTF-8");
+        message.setContent(MBP);
 
         // 6. Set the sending time
         message.setSentDate(new Date());
@@ -116,6 +116,34 @@ public class mail
         System.arraycopy(recipientAddress, 0, tempRecipientAddress , 0, addressLength);
         tempRecipientAddress[addressLength+1] = new InternetAddress(recipient.trim(), "", "UTF-8");
         recipientAddress = tempRecipientAddress;
+    }
+    
+    public MimeMultipart text(String words)throws Exception{
+        MimeBodyPart text = new MimeBodyPart();
+        text.setContent(words, "text/html;charset=UTF-8");
+        MimeMultipart mm = new MimeMultipart();
+        mm.addBodyPart(text);
+        return mm;
+    }
+    
+    public MimeMultipart text_image(String sentences,String imageCD,String imageID)throws Exception{
+        // 5. image node creation
+        MimeBodyPart image = new MimeBodyPart();
+        DataHandler dh = new DataHandler(new FileDataSource(imageCD)); //read local picture file
+        image.setDataHandler(dh);                   // put the picture file into handler
+        image.setContentID(imageID);     // set an ID for data handler
+
+        // 6. create file node
+        MimeBodyPart text = new MimeBodyPart();
+        //    put inmage intp mail content 
+        text.setContent(sentences + "<br/><img src='cid:"+imageID + "'/>", "text/html;charset=UTF-8");
+
+        // 7. （txt+picture） manpulpate the relationship between picture and txt
+        MimeMultipart mm_text_image = new MimeMultipart();
+        mm_text_image.addBodyPart(text);
+        mm_text_image.addBodyPart(image);
+        mm_text_image.setSubType("related");    // connect
+        return mm_text_image;
     }
     
     // setter and getter methods
