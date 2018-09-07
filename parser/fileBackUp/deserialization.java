@@ -1,6 +1,7 @@
 package file;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -15,12 +16,9 @@ public class deserialization implements Serializable{
 	private String filePath;
 	private Object[] data;
 
-	public deserialization(String filePath, Object data[]) {
+	public deserialization(String filePath) {
 		this.filePath = filePath;
-		this.data = data;
-	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		data = null;
 	}
 	
 	public boolean deserializeObject() {
@@ -36,19 +34,19 @@ public class deserialization implements Serializable{
             f_in.close();
             return true;
 
-        } 
-        catch(IOException ex) 
-        { 
-            System.out.println("IOException is caught"); 
-            return false;
-        } 
-          
-        catch(ClassNotFoundException ex) 
+        } catch(FileNotFoundException exception)
+	    {
+            System.out.println("The file was not found.");
+        }catch(IOException exception)
+	    {
+            System.out.println(exception);
+        }
+		catch(ClassNotFoundException ex) 
         { 
             System.out.println("ClassNotFoundException is caught");
             return false;
-        } 
-		
+        }
+		return false; 
 	}
 	
 	/**

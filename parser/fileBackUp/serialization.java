@@ -15,19 +15,21 @@ public class serialization implements java.io.Serializable{
 	private String folderDir;
 	private String fileName;
 	private Object[] obj;
+	private String dash;
 	
 	public serialization(Object[] obj, String folderDir,String fileName) {
 		this.obj = obj;
 		this.fileName = fileName;
 		this.setFolderDir(folderDir);
+		dash = "/";
 	}
 	
-	public boolean SerializeObject(Object Obj) {
+	public boolean SerializeObject() {
 		 // Serialization 
 		FileOutputStream f_out = null;
 		try {
 			
-			File file = new File(folderDir + fileName + ".dat");
+			File file = new File(folderDir + dash + fileName + ".dat" ); 
 			Files.deleteIfExists(file.toPath());
 			// delete file is exist
 			try {
@@ -43,7 +45,7 @@ public class serialization implements java.io.Serializable{
 			ObjectOutputStream obj_out = new ObjectOutputStream (f_out);
 			
 			// Write object out to disk
-			obj_out.writeObject (Obj);
+			obj_out.writeObject (obj);
 			obj_out.flush();
 			obj_out.close();
 			f_out.flush();
