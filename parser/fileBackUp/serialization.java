@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributes;
 
 public class serialization implements java.io.Serializable{
 	/**
@@ -31,6 +34,7 @@ public class serialization implements java.io.Serializable{
 			
 			File file = new File(folderDir + dash + fileName + ".dat" ); 
 			Files.deleteIfExists(file.toPath());
+			
 			// delete file is exist
 			try {
 				Files.deleteIfExists(file.toPath());
@@ -59,12 +63,33 @@ public class serialization implements java.io.Serializable{
             // releases all system resources from the streams
             if(f_out!=null)
 				try {
+					// hide file
+					hide();
 					f_out.close();
+					return true;
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
          }
+	}
+	public void hide() throws InterruptedException, IOException {
+		Path p = Paths.get(folderDir + dash + fileName + ".dat");
+
+		//link file to DosFileAttributes
+		DosFileAttributes dos = Files.readAttributes(p, DosFileAttributes.class);
+
+		//hide the Log file
+		Files.setAttribute(p, "dos:hidden", true);
+		
+		// Opening Read-Only Normal File..
+		Files.setAttribute(p, "dos:readonly", true);
+
+		System.out.println(dos.isHidden());
 	}
 	
 	public Object getObj() {
