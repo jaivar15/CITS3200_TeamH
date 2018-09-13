@@ -1,19 +1,12 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import file.deserialization;
-import file.serialization;
-
 import javax.swing.JTextField;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -26,13 +19,13 @@ public class changeID extends JFrame {
 	private JTextField txtDeviation;
 	private JTextField txtDays;
 	private JTextField txtTime;
-	private JLabel lblFile;
 	
 	private String animalName;
 	private String animalDescription;
 	private double deviation;
 	private int days;
 	private double time;
+	private String filePath;
 	
 
 	/**
@@ -43,7 +36,8 @@ public class changeID extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					changeID frame = new changeID();
+					String filename = "C:\\\\Users\\\\jarro\\\\Documents\\\\Uni\\\\Computer Science\\\\Eclipse\\\\CITS3200/test.dat";
+					changeID frame = new changeID(filename);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,7 +49,7 @@ public class changeID extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public changeID() {
+	public changeID(String filename) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 512, 348);
 		contentPane = new JPanel();
@@ -63,7 +57,6 @@ public class changeID extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		String filename = "/Users/varunjain/Desktop/test.dat";
 		readFile(filename);
 		
 		txtName = new JTextField();
@@ -92,7 +85,7 @@ public class changeID extends JFrame {
 		lblNewLabel.setBounds(67, 131, 124, 16);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblParamters = new JLabel("PARAMTERS");
+		JLabel lblParamters = new JLabel("PARAMETERS");
 		lblParamters.setBounds(30, 103, 96, 16);
 		contentPane.add(lblParamters);
 		
@@ -137,26 +130,29 @@ public class changeID extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (checkInput()) {
-				String animalName = txtName.getText();
-				String animalDescription = txtAnimalDescription.getText();
-				double deviation = Double.valueOf(txtDeviation.getText());
-				int days = Integer.valueOf(txtDays.getText());
-				double time = Double.valueOf(txtTime.getText());
-				String filePath = lblFile.getText();
-				Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
-				serialization ser = new serialization(data, "/Users/varunjain/Desktop","test");
-				ser.SerializeObject();
+				try {
+					String animalName = txtName.getText();
+					String animalDescription = txtAnimalDescription.getText();
+					double deviation = Double.valueOf(txtDeviation.getText());
+					int days = Integer.valueOf(txtDays.getText());
+					double time = Double.valueOf(txtTime.getText());
+					Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
+					serialization ser = new serialization(data, "C:\\\\Users\\\\jarro\\\\Documents\\\\Uni\\\\Computer Science\\\\Eclipse\\\\CITS3200","test");
+					ser.SerializeObject();
+					JOptionPane.showMessageDialog(null, "Updated successfully");
+					close();
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Please check number fields only contain numbers");
+				}
 			}
 		}
 		
-		// TODO check they are numbers
 		private boolean checkInput() {
 			if (txtName.getText() == "");
 			else if (txtAnimalDescription.getText() == "");
 			else if (txtDeviation.getText() == "");
 			else if (txtDays.getText() == "");
 			else if (txtTime.getText() == "");
-			else if (lblFile.getText() == "");
 			else {
 				return true;
 			}
@@ -164,6 +160,10 @@ public class changeID extends JFrame {
 			return false;
 		}
 		
+	}
+	
+	private void close() {
+		this.dispose();
 	}
 	
 	private void readFile(String filename) {
@@ -179,5 +179,6 @@ public class changeID extends JFrame {
 		deviation = (double)o[2];
 		days = (int)o[3];
 		time = (double)o[4];
+		filePath = (String)o[5];
 	}
 }

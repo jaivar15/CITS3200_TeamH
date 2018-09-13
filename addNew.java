@@ -1,18 +1,14 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import file.serialization;
-
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextField;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -81,7 +77,7 @@ public class addNew extends JFrame {
 		lblNewLabel.setBounds(67, 131, 124, 16);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblParamters = new JLabel("PARAMTERS");
+		JLabel lblParamters = new JLabel("PARAMETERS");
 		lblParamters.setBounds(30, 103, 96, 16);
 		contentPane.add(lblParamters);
 		
@@ -105,15 +101,17 @@ public class addNew extends JFrame {
 		JFileChooser j = new JFileChooser(); 
 		btnFileInput.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				j.setAcceptAllFileFilterUsed(false);
+				j.setFileFilter(new FileNameExtensionFilter("Csv files", "csv"));
 				
 				// fileChosen tells you when a file has been chosen
 				int fileChosen = j.showOpenDialog(null);
-				
-				// TODO fix closing without selecting a file
-				// TODO change to only accept csv files
 	            if (fileChosen == 0); {
-	            	String fileName = j.getSelectedFile().getAbsolutePath();
-	            	lblFile.setText(fileName);
+	            	try {
+	            		String fileName = j.getSelectedFile().getAbsolutePath();
+	            		lblFile.setText(fileName);
+	            	} catch (NullPointerException ex) {
+	            	}
 	            }
 
 			}
@@ -150,19 +148,27 @@ public class addNew extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (checkInput()) {
-				String animalName = txtName.getText();
-				String animalDescription = txtAnimalDescription.getText();
-				double deviation = Double.valueOf(txtDeviation.getText());
-				int days = Integer.valueOf(txtDays.getText());
-				double time = Double.valueOf(txtTime.getText());
-				String filePath = lblFile.getText();
-				Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
-				serialization ser = new serialization(data, "/Users/varunjain/Desktop","test");
-				ser.SerializeObject();
+				try {
+					String animalName = txtName.getText();
+					String animalDescription = txtAnimalDescription.getText();
+					double deviation = Double.valueOf(txtDeviation.getText());
+					int days = Integer.valueOf(txtDays.getText());
+					double time = Double.valueOf(txtTime.getText());
+					String filePath = lblFile.getText();
+					
+					Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
+					serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\CITS3200","test");
+					ser.SerializeObject();
+					
+					JOptionPane.showMessageDialog(null, "Added successfully");
+					close();
+					
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Please check number fields only contain numbers");
+				}
 			}
 		}
 		
-		// TODO check they are numbers
 		private boolean checkInput() {
 			if (txtName.getText() == "");
 			else if (txtAnimalDescription.getText() == "");
@@ -173,10 +179,13 @@ public class addNew extends JFrame {
 			else {
 				return true;
 			}
-			JOptionPane.showMessageDialog(null, "Please fill in all fields");
+			JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file");
 			return false;
 		}
 		
 	}
+	
+	private void close() {
+		this.dispose();
+	}
 }
-
