@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import file.deserialization;
 import file.serialization;
 
 import javax.swing.JTextField;
@@ -17,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
-public class addNew extends JFrame {
+public class changeID extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtName;
@@ -26,6 +27,13 @@ public class addNew extends JFrame {
 	private JTextField txtDays;
 	private JTextField txtTime;
 	private JLabel lblFile;
+	
+	private String animalName;
+	private String animalDescription;
+	private double deviation;
+	private int days;
+	private double time;
+	
 
 	/**
 	 * Launch the application.
@@ -35,7 +43,7 @@ public class addNew extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					addNew frame = new addNew();
+					changeID frame = new changeID();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +55,7 @@ public class addNew extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public addNew() {
+	public changeID() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 512, 348);
 		contentPane = new JPanel();
@@ -55,8 +63,11 @@ public class addNew extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		String filename = "/Users/varunjain/Desktop/test.dat";
+		readFile(filename);
+		
 		txtName = new JTextField();
-		txtName.setText("");
+		txtName.setText(animalName);
 		txtName.setBounds(106, 11, 186, 32);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
@@ -72,7 +83,7 @@ public class addNew extends JFrame {
 		contentPane.add(lblLogDescription);
 		
 		txtAnimalDescription = new JTextField();
-		txtAnimalDescription.setText("");
+		txtAnimalDescription.setText(animalDescription);
 		txtAnimalDescription.setBounds(128, 52, 130, 26);
 		contentPane.add(txtAnimalDescription);
 		txtAnimalDescription.setColumns(10);
@@ -93,50 +104,26 @@ public class addNew extends JFrame {
 		lblOutofboundRange.setBounds(67, 198, 124, 16);
 		contentPane.add(lblOutofboundRange);
 		
-		JButton btnFileInput = new JButton("Choose a File:");
-		btnFileInput.setBounds(267, 98, 117, 29);
-		contentPane.add(btnFileInput);
 		
-		String fileName = "";
-		lblFile = new JLabel(fileName);
-		lblFile.setBounds(394, 99, 92, 26);
-		contentPane.add(lblFile);
-		
-		JFileChooser j = new JFileChooser(); 
-		btnFileInput.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				// fileChosen tells you when a file has been chosen
-				int fileChosen = j.showOpenDialog(null);
-				
-				// TODO fix closing without selecting a file
-				// TODO change to only accept csv files
-	            if (fileChosen == 0); {
-	            	String fileName = j.getSelectedFile().getAbsolutePath();
-	            	lblFile.setText(fileName);
-	            }
-
-			}
-		});
 		
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setBounds(315, 193, 117, 29);
 		contentPane.add(btnSubmit);
 		
 		txtDeviation = new JTextField();
-		txtDeviation.setText("");
+		txtDeviation.setText(Double.toString(deviation));
 		txtDeviation.setBounds(172, 129, 86, 20);
 		contentPane.add(txtDeviation);
 		txtDeviation.setColumns(10);
 		
 		txtDays = new JTextField();
-		txtDays.setText("");
+		txtDays.setText(Integer.toString(days));
 		txtDays.setBounds(172, 161, 86, 20);
 		contentPane.add(txtDays);
 		txtDays.setColumns(10);
 		
 		txtTime = new JTextField();
-		txtTime.setText("");
+		txtTime.setText(Double.toString(time));
 		txtTime.setBounds(172, 196, 86, 20);
 		contentPane.add(txtTime);
 		txtTime.setColumns(10);
@@ -178,5 +165,19 @@ public class addNew extends JFrame {
 		}
 		
 	}
+	
+	private void readFile(String filename) {
+		Object[] o = null;
+		deserialization deser = new deserialization(filename);
+		deser.deserializeObject();
+		o = deser.getData();
+		if( o == null) {
+			System.out.println("error");
+		}
+		animalName = (String)o[0];
+		animalDescription = (String)o[1];
+		deviation = (double)o[2];
+		days = (int)o[3];
+		time = (double)o[4];
+	}
 }
-
