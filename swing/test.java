@@ -12,6 +12,5 @@ package swing;
 public class test {
     public static void main(String[] args){
         Home home = new Home();
-    }
-    
+    } 
 }
