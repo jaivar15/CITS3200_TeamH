@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=testmail
-comment0.text=\n\ JavaMail\ version\:\ 1.6.0\n\ JDK\ version\:\ JDK\ 1.7\ or\ up\n
-comment1.params=args
-comment1.target=void\ main(java.lang.String[])
-comment2.params=session\ sendMail\ receiveMail
-comment2.target=javax.mail.internet.MimeMessage\ createMimeMessage(javax.mail.Session,\ java.lang.String,\ java.lang.String)
-comment2.text=\n\ create\ a\ simple\ mail\n\ @param\ session\n\ @param\ sendMail\ \n\ @param\ receiveMail\ \n\ @return\n\ @throws\ Exception\n
-numComments=3
