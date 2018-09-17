@@ -12,14 +12,22 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
+import java.awt.CardLayout;
+import javax.swing.JComboBox;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JLabel;
+import javax.swing.JFileChooser;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author y2434
  */
 public class Home extends javax.swing.JFrame {
-
+    private JComboBox choiceBox;
     /**
      * Creates new form Home
      */
@@ -32,7 +40,7 @@ public class Home extends javax.swing.JFrame {
         frame.setUndecorated(true);
         initComponents();
         setColor(btn_1); 
-        resetColor(new JPanel[]{btn_2,btn_3,btn_4,btn_5});
+        resetColor(new JPanel[]{btn_4,btn_3,btn_5,btn_2});
     }
 
     /**
@@ -44,10 +52,6 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel8 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jPanel10 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         btn_1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -55,13 +59,13 @@ public class Home extends javax.swing.JFrame {
         btn_3 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        btn_4 = new javax.swing.JPanel();
+        btn_5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        btn_5 = new javax.swing.JPanel();
+        btn_2 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        btn_2 = new javax.swing.JPanel();
+        btn_4 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -70,50 +74,40 @@ public class Home extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 39, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        HomePanel = new javax.swing.JPanel();
+        usersPanel = new javax.swing.JPanel();
+        searchVar1 = new javax.swing.JTextField();
+        searchVar3 = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        AddIntoButton = new javax.swing.JButton();
+        addAnimalPanel = new javax.swing.JPanel();
+        AnimalNameText = new javax.swing.JTextField();
+        StandDeviationText = new javax.swing.JTextField();
+        AnimalDescriptionText = new javax.swing.JTextField();
+        NumberOfDaysText = new javax.swing.JTextField();
+        DurationText = new javax.swing.JTextField();
+        StandardDeviationLabel = new javax.swing.JLabel();
+        AnimalNameLabel = new javax.swing.JLabel();
+        AnimalDescriptionLabel = new javax.swing.JLabel();
+        NumberOfDaysLable = new javax.swing.JLabel();
+        DurationLabel = new javax.swing.JLabel();
+        ChoseFileButton = new javax.swing.JButton();
+        lblFile = new javax.swing.JLabel();
+        Submit = new javax.swing.JButton();
+        changeIDPanel = new javax.swing.JPanel();
+        ChangeStandardDeviationLabel = new javax.swing.JLabel();
+        ChangeDurationLabel = new javax.swing.JLabel();
+        ChangeStandDeviationText = new javax.swing.JTextField();
+        ChangeAnimalDescriptionText = new javax.swing.JTextField();
+        ChangeAnimalNameText = new javax.swing.JTextField();
+        ChangeNumberOfDaysText = new javax.swing.JTextField();
+        ChangeAnimalNameLabel = new javax.swing.JLabel();
+        ChangeDurationText = new javax.swing.JTextField();
+        ChangeAnimalDescriptionLabel = new javax.swing.JLabel();
+        ChangeNumberOfDaysLable = new javax.swing.JLabel();
+        ChangeIDButton = new javax.swing.JButton();
+        settingPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 102, 255));
@@ -152,7 +146,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         btn_1Layout.setVerticalGroup(
             btn_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,11 +186,11 @@ public class Home extends javax.swing.JFrame {
             .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        btn_4.setBackground(new java.awt.Color(23, 35, 51));
-        btn_4.setPreferredSize(new java.awt.Dimension(100, 30));
-        btn_4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_5.setBackground(new java.awt.Color(23, 35, 51));
+        btn_5.setPreferredSize(new java.awt.Dimension(100, 30));
+        btn_5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                btn_4MousePressed(evt);
+                btn_5MousePressed(evt);
             }
         });
 
@@ -206,52 +200,21 @@ public class Home extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Settings.png"))); // NOI18N
 
-        javax.swing.GroupLayout btn_4Layout = new javax.swing.GroupLayout(btn_4);
-        btn_4.setLayout(btn_4Layout);
-        btn_4Layout.setHorizontalGroup(
-            btn_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_4Layout.createSequentialGroup()
+        javax.swing.GroupLayout btn_5Layout = new javax.swing.GroupLayout(btn_5);
+        btn_5.setLayout(btn_5Layout);
+        btn_5Layout.setHorizontalGroup(
+            btn_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_5Layout.createSequentialGroup()
                 .addGap(0, 42, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
         );
-        btn_4Layout.setVerticalGroup(
-            btn_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        btn_5.setBackground(new java.awt.Color(23, 35, 51));
-        btn_5.setPreferredSize(new java.awt.Dimension(100, 30));
-        btn_5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btn_5MousePressed(evt);
-            }
-        });
-
-        jLabel12.setFont(new java.awt.Font("Segoe Script", 2, 18)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Users");
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Send_Email.png"))); // NOI18N
-
-        javax.swing.GroupLayout btn_5Layout = new javax.swing.GroupLayout(btn_5);
-        btn_5.setLayout(btn_5Layout);
-        btn_5Layout.setHorizontalGroup(
-            btn_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_5Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel12)
-                .addContainerGap(48, Short.MAX_VALUE))
-        );
         btn_5Layout.setVerticalGroup(
             btn_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         btn_2.setBackground(new java.awt.Color(23, 35, 51));
@@ -262,24 +225,55 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Segoe Script", 2, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Change ID");
+        jLabel12.setFont(new java.awt.Font("Segoe Script", 2, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Users");
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Change.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Send_Email.png"))); // NOI18N
 
         javax.swing.GroupLayout btn_2Layout = new javax.swing.GroupLayout(btn_2);
         btn_2.setLayout(btn_2Layout);
         btn_2Layout.setHorizontalGroup(
             btn_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel12)
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+        btn_2Layout.setVerticalGroup(
+            btn_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btn_4.setBackground(new java.awt.Color(23, 35, 51));
+        btn_4.setPreferredSize(new java.awt.Dimension(100, 30));
+        btn_4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btn_4MousePressed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Segoe Script", 2, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Change ID");
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Change.png"))); // NOI18N
+
+        javax.swing.GroupLayout btn_4Layout = new javax.swing.GroupLayout(btn_4);
+        btn_4.setLayout(btn_4Layout);
+        btn_4Layout.setHorizontalGroup(
+            btn_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_4Layout.createSequentialGroup()
                 .addGap(0, 19, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        btn_2Layout.setVerticalGroup(
-            btn_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        btn_4Layout.setVerticalGroup(
+            btn_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -291,21 +285,21 @@ public class Home extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(btn_1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_4, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btn_5, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btn_1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-            .addComponent(btn_5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+            .addComponent(btn_2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
             .addComponent(btn_3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-            .addComponent(btn_4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-            .addComponent(btn_2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+            .addComponent(btn_5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+            .addComponent(btn_4, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 520, 950, 80));
@@ -366,17 +360,357 @@ public class Home extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 50));
 
         jPanel3.setBackground(new java.awt.Color(242, 242, 242));
+        jPanel3.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        HomePanel.setBackground(new java.awt.Color(153, 255, 255));
+
+        javax.swing.GroupLayout HomePanelLayout = new javax.swing.GroupLayout(HomePanel);
+        HomePanel.setLayout(HomePanelLayout);
+        HomePanelLayout.setHorizontalGroup(
+            HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 950, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        HomePanelLayout.setVerticalGroup(
+            HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 470, Short.MAX_VALUE)
         );
+
+        jPanel3.add(HomePanel, "card2");
+        HomePanel.getAccessibleContext().setAccessibleName("");
+
+        usersPanel.setBackground(new java.awt.Color(153, 204, 255));
+
+        searchVar1.setBackground(new java.awt.Color(42, 75, 115));
+        searchVar1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        searchVar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchVar1ActionPerformed(evt);
+            }
+        });
+
+        searchVar3.setBackground(new java.awt.Color(42, 75, 115));
+        searchVar3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        searchVar3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchVar3ActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Email Name");
+
+        jLabel16.setText("Emails Account");
+
+        AddIntoButton.setText("Add Into ");
+        AddIntoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddIntoButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout usersPanelLayout = new javax.swing.GroupLayout(usersPanel);
+        usersPanel.setLayout(usersPanelLayout);
+        usersPanelLayout.setHorizontalGroup(
+            usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(usersPanelLayout.createSequentialGroup()
+                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(usersPanelLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, usersPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(searchVar1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(usersPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addGap(36, 36, 36)
+                                .addComponent(searchVar3, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(usersPanelLayout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(AddIntoButton)))
+                .addContainerGap(574, Short.MAX_VALUE))
+        );
+        usersPanelLayout.setVerticalGroup(
+            usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(usersPanelLayout.createSequentialGroup()
+                .addGap(71, 71, 71)
+                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchVar3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchVar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
+                .addComponent(AddIntoButton)
+                .addGap(95, 95, 95))
+        );
+
+        jPanel3.add(usersPanel, "card3");
+
+        addAnimalPanel.setBackground(new java.awt.Color(153, 153, 255));
+
+        AnimalNameText.setBackground(new java.awt.Color(42, 75, 115));
+        AnimalNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        AnimalNameText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnimalNameTextActionPerformed(evt);
+            }
+        });
+
+        StandDeviationText.setBackground(new java.awt.Color(42, 75, 115));
+        StandDeviationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        StandDeviationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StandDeviationTextActionPerformed(evt);
+            }
+        });
+
+        AnimalDescriptionText.setBackground(new java.awt.Color(42, 75, 115));
+        AnimalDescriptionText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        AnimalDescriptionText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnimalDescriptionTextActionPerformed(evt);
+            }
+        });
+
+        NumberOfDaysText.setBackground(new java.awt.Color(42, 75, 115));
+        NumberOfDaysText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        NumberOfDaysText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumberOfDaysTextActionPerformed(evt);
+            }
+        });
+
+        DurationText.setBackground(new java.awt.Color(42, 75, 115));
+        DurationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        DurationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DurationTextActionPerformed(evt);
+            }
+        });
+
+        StandardDeviationLabel.setText("standard deviation");
+
+        AnimalNameLabel.setText("Animal Name ");
+
+        AnimalDescriptionLabel.setText("Animal Description ");
+
+        NumberOfDaysLable.setText("Number of days");
+
+        DurationLabel.setText("Duration");
+
+        ChoseFileButton.setText("Chose the data file");
+        ChoseFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChoseFileButtonActionPerformed(evt);
+            }
+        });
+
+        Submit.setText("Submit");
+        Submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubmitActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout addAnimalPanelLayout = new javax.swing.GroupLayout(addAnimalPanel);
+        addAnimalPanel.setLayout(addAnimalPanelLayout);
+        addAnimalPanelLayout.setHorizontalGroup(
+            addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(AnimalNameLabel)
+                            .addComponent(StandardDeviationLabel)
+                            .addComponent(AnimalDescriptionLabel)
+                            .addComponent(NumberOfDaysLable)
+                            .addComponent(DurationLabel))
+                        .addGap(58, 58, 58)
+                        .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(StandDeviationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NumberOfDaysText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DurationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Submit)
+                            .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                                .addComponent(ChoseFileButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblFile, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(460, Short.MAX_VALUE))
+        );
+        addAnimalPanelLayout.setVerticalGroup(
+            addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                        .addComponent(AnimalNameLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(AnimalDescriptionLabel)
+                        .addGap(12, 12, 12)
+                        .addComponent(StandardDeviationLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(NumberOfDaysLable)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(DurationLabel))
+                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                        .addComponent(AnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(StandDeviationText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NumberOfDaysText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DurationText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
+                .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ChoseFileButton)
+                    .addComponent(lblFile))
+                .addGap(30, 30, 30)
+                .addComponent(Submit)
+                .addContainerGap(146, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(addAnimalPanel, "card4");
+
+        changeIDPanel.setBackground(new java.awt.Color(204, 153, 255));
+
+        ChangeStandardDeviationLabel.setText("standard deviation");
+
+        ChangeDurationLabel.setText("Duration");
+
+        ChangeStandDeviationText.setBackground(new java.awt.Color(42, 75, 115));
+        ChangeStandDeviationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeStandDeviationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeStandDeviationTextActionPerformed(evt);
+            }
+        });
+
+        ChangeAnimalDescriptionText.setBackground(new java.awt.Color(42, 75, 115));
+        ChangeAnimalDescriptionText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeAnimalDescriptionText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeAnimalDescriptionTextActionPerformed(evt);
+            }
+        });
+
+        ChangeAnimalNameText.setBackground(new java.awt.Color(42, 75, 115));
+        ChangeAnimalNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeAnimalNameText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeAnimalNameTextActionPerformed(evt);
+            }
+        });
+
+        ChangeNumberOfDaysText.setBackground(new java.awt.Color(42, 75, 115));
+        ChangeNumberOfDaysText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeNumberOfDaysText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeNumberOfDaysTextActionPerformed(evt);
+            }
+        });
+
+        ChangeAnimalNameLabel.setText("Animal Name ");
+
+        ChangeDurationText.setBackground(new java.awt.Color(42, 75, 115));
+        ChangeDurationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeDurationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeDurationTextActionPerformed(evt);
+            }
+        });
+
+        ChangeAnimalDescriptionLabel.setText("Animal Description ");
+
+        ChangeNumberOfDaysLable.setText("Number of days");
+
+        ChangeIDButton.setText("Change");
+        ChangeIDButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChangeIDButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout changeIDPanelLayout = new javax.swing.GroupLayout(changeIDPanel);
+        changeIDPanel.setLayout(changeIDPanelLayout);
+        changeIDPanelLayout.setHorizontalGroup(
+            changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(changeIDPanelLayout.createSequentialGroup()
+                .addGroup(changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(changeIDPanelLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ChangeAnimalNameLabel)
+                            .addComponent(ChangeStandardDeviationLabel)
+                            .addComponent(ChangeAnimalDescriptionLabel)
+                            .addComponent(ChangeNumberOfDaysLable)
+                            .addComponent(ChangeDurationLabel))
+                        .addGap(58, 58, 58)
+                        .addGroup(changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ChangeStandDeviationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ChangeAnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ChangeNumberOfDaysText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ChangeDurationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ChangeAnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(changeIDPanelLayout.createSequentialGroup()
+                        .addGap(158, 158, 158)
+                        .addComponent(ChangeIDButton)))
+                .addContainerGap(494, Short.MAX_VALUE))
+        );
+        changeIDPanelLayout.setVerticalGroup(
+            changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(changeIDPanelLayout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addGroup(changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(changeIDPanelLayout.createSequentialGroup()
+                        .addComponent(ChangeAnimalNameLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(ChangeAnimalDescriptionLabel)
+                        .addGap(12, 12, 12)
+                        .addComponent(ChangeStandardDeviationLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ChangeNumberOfDaysLable)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ChangeDurationLabel))
+                    .addGroup(changeIDPanelLayout.createSequentialGroup()
+                        .addComponent(ChangeAnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ChangeAnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ChangeStandDeviationText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ChangeNumberOfDaysText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ChangeDurationText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(59, 59, 59)
+                .addComponent(ChangeIDButton)
+                .addContainerGap(187, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(changeIDPanel, "card5");
+
+        settingPanel.setBackground(new java.awt.Color(255, 204, 102));
+
+        javax.swing.GroupLayout settingPanelLayout = new javax.swing.GroupLayout(settingPanel);
+        settingPanel.setLayout(settingPanelLayout);
+        settingPanelLayout.setHorizontalGroup(
+            settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 950, Short.MAX_VALUE)
+        );
+        settingPanelLayout.setVerticalGroup(
+            settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(settingPanel, "card6");
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 950, 470));
 
@@ -398,33 +732,122 @@ public class Home extends javax.swing.JFrame {
     private void btn_1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_1MousePressed
         // TODO add your handling code here:
         setColor(btn_1);
-        resetColor( new JPanel[]{ btn_2, btn_3,  btn_4,btn_5});
+        resetColor( new JPanel[]{ btn_4, btn_3,  btn_5,btn_2});
+        CardLayout card = (CardLayout)jPanel3.getLayout();
+        card.show(jPanel3, "card2");
     }//GEN-LAST:event_btn_1MousePressed
-
-    private void btn_2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_2MousePressed
-        // TODO add your handling code here:
-        setColor(btn_2);
-        resetColor(new JPanel[]{ btn_1, btn_3,  btn_4,btn_5});
-    }//GEN-LAST:event_btn_2MousePressed
-
-    private void btn_3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_3MousePressed
-        // TODO add your handling code here:
-        setColor(btn_3);
-        resetColor( new JPanel[]{ btn_1, btn_2,  btn_4,btn_5});
-        addNew();
-    }//GEN-LAST:event_btn_3MousePressed
 
     private void btn_4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_4MousePressed
         // TODO add your handling code here:
         setColor(btn_4);
-        resetColor( new JPanel[]{ btn_2, btn_3,btn_1,btn_5});
+        resetColor(new JPanel[]{ btn_1, btn_3,  btn_5,btn_2});
+        CardLayout card = (CardLayout)jPanel3.getLayout();
+        card.show(jPanel3, "card5");
     }//GEN-LAST:event_btn_4MousePressed
+
+    private void btn_3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_3MousePressed
+        // TODO add your handling code here:
+        setColor(btn_3);
+        resetColor( new JPanel[]{ btn_1, btn_4,  btn_5,btn_2});
+        //addNew();
+        CardLayout card = (CardLayout)jPanel3.getLayout();
+        card.show(jPanel3, "card4");
+    }//GEN-LAST:event_btn_3MousePressed
 
     private void btn_5MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_5MousePressed
         // TODO add your handling code here:
         setColor(btn_5);
-        resetColor( new JPanel[]{ btn_1, btn_2,btn_3,btn_4});
+        resetColor( new JPanel[]{ btn_4, btn_3,btn_1,btn_2});
+        CardLayout card = (CardLayout)jPanel3.getLayout();
+        card.show(jPanel3, "card6");
     }//GEN-LAST:event_btn_5MousePressed
+
+    private void btn_2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_2MousePressed
+        // TODO add your handling code here:
+        setColor(btn_2);
+        resetColor( new JPanel[]{ btn_1, btn_4,btn_3,btn_5});
+        CardLayout card = (CardLayout)jPanel3.getLayout();
+        card.show(jPanel3, "card3");
+    }//GEN-LAST:event_btn_2MousePressed
+
+    private void AnimalNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnimalNameTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AnimalNameTextActionPerformed
+
+    private void StandDeviationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StandDeviationTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_StandDeviationTextActionPerformed
+
+    private void AnimalDescriptionTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnimalDescriptionTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AnimalDescriptionTextActionPerformed
+
+    private void NumberOfDaysTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumberOfDaysTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NumberOfDaysTextActionPerformed
+
+    private void DurationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DurationTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DurationTextActionPerformed
+
+    private void searchVar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchVar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchVar1ActionPerformed
+
+    private void searchVar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchVar3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchVar3ActionPerformed
+
+    private void ChoseFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoseFileButtonActionPerformed
+        // TODO add your handling code here:
+        JFileChooser j = new JFileChooser();
+        j.setAcceptAllFileFilterUsed(false);
+                j.setFileFilter(new FileNameExtensionFilter("Csv files", "csv"));
+
+                // fileChosen tells you when a file has been chosen
+                int fileChosen = j.showOpenDialog(null);
+                if (fileChosen == 0); {
+                    try {
+                        String fileName = j.getSelectedFile().getAbsolutePath();
+                        lblFile.setText(fileName);
+                    } catch (NullPointerException ex) {
+                    }
+                }
+        fileName();
+    }//GEN-LAST:event_ChoseFileButtonActionPerformed
+
+    private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
+        // TODO add your handling code here:
+        actionPerformed();
+    }//GEN-LAST:event_SubmitActionPerformed
+
+    private void AddIntoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddIntoButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddIntoButtonActionPerformed
+
+    private void ChangeStandDeviationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeStandDeviationTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeStandDeviationTextActionPerformed
+
+    private void ChangeAnimalDescriptionTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeAnimalDescriptionTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeAnimalDescriptionTextActionPerformed
+
+    private void ChangeAnimalNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeAnimalNameTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeAnimalNameTextActionPerformed
+
+    private void ChangeNumberOfDaysTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeNumberOfDaysTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeNumberOfDaysTextActionPerformed
+
+    private void ChangeDurationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeDurationTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeDurationTextActionPerformed
+
+    private void ChangeIDButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeIDButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ChangeIDButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -464,6 +887,55 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
+    private void fileName(){
+        String fileName = "";
+        lblFile = new JLabel(fileName);
+        lblFile.setBounds(394, 99, 92, 26);
+        addAnimalPanel.add(lblFile);
+    }
+    
+    public void actionPerformed() {
+            if (checkInput()) {
+                try {
+                    String animalName = AnimalNameText.getText();
+                    String animalDescription = AnimalDescriptionText.getText();
+                    double deviation = Double.valueOf(StandDeviationText.getText());
+                    int days = Integer.valueOf(NumberOfDaysText.getText());
+                    double time = Double.valueOf(DurationText.getText());
+                    String filePath = lblFile.getText();
+
+                    //TODO
+                    //Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
+                    //serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\CITS3200","test");
+                    //ser.SerializeObject();
+
+                    JOptionPane.showMessageDialog(null, "Added successfully");
+                    //close();
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please check number fields only contain numbers");
+                }
+            }
+        }
+    
+    private boolean checkInput() {
+            AtomicBoolean returnSt = new AtomicBoolean(true);
+            if (AnimalNameText.getText().equals("")) {
+                returnSt.set(false);
+            } else if (AnimalDescriptionText.getText().equals("") || StandDeviationText.getText().equals("")) returnSt.set(false);
+            else if (NumberOfDaysText.getText().equals("")) {
+                returnSt.set(false);
+            } else if (DurationText.getText().equals("")) {
+                returnSt.set(false);
+            } else if (lblFile.getText().equals("")) {
+                returnSt.set(false);
+            }
+            if(!returnSt.get()) {
+                JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file");
+            }
+            return returnSt.get();
+        }
+
     
     private void setColor(JPanel pane)
     {
@@ -486,66 +958,47 @@ public class Home extends javax.swing.JFrame {
 		this.setVisible(true);
 	}
     
-    private void addNew() {
-		addNew a = new addNew();
-		a.setVisible(true);
-		this.setVisible(false);
-		a.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				makeVisible();
-			}
-
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			} 
-		});
-	}
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddIntoButton;
+    private javax.swing.JLabel AnimalDescriptionLabel;
+    private javax.swing.JTextField AnimalDescriptionText;
+    private javax.swing.JLabel AnimalNameLabel;
+    private javax.swing.JTextField AnimalNameText;
+    private javax.swing.JLabel ChangeAnimalDescriptionLabel;
+    private javax.swing.JTextField ChangeAnimalDescriptionText;
+    private javax.swing.JLabel ChangeAnimalNameLabel;
+    private javax.swing.JTextField ChangeAnimalNameText;
+    private javax.swing.JLabel ChangeDurationLabel;
+    private javax.swing.JTextField ChangeDurationText;
+    private javax.swing.JButton ChangeIDButton;
+    private javax.swing.JLabel ChangeNumberOfDaysLable;
+    private javax.swing.JTextField ChangeNumberOfDaysText;
+    private javax.swing.JTextField ChangeStandDeviationText;
+    private javax.swing.JLabel ChangeStandardDeviationLabel;
+    private javax.swing.JButton ChoseFileButton;
+    private javax.swing.JLabel DurationLabel;
+    private javax.swing.JTextField DurationText;
+    private javax.swing.JPanel HomePanel;
+    private javax.swing.JLabel NumberOfDaysLable;
+    private javax.swing.JTextField NumberOfDaysText;
+    private javax.swing.JTextField StandDeviationText;
+    private javax.swing.JLabel StandardDeviationLabel;
+    private javax.swing.JButton Submit;
+    private javax.swing.JPanel addAnimalPanel;
     private javax.swing.JPanel btn_1;
     private javax.swing.JPanel btn_2;
     private javax.swing.JPanel btn_3;
     private javax.swing.JPanel btn_4;
     private javax.swing.JPanel btn_5;
+    private javax.swing.JPanel changeIDPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -555,12 +1008,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel lblFile;
     private javax.swing.JTextField searchVar;
+    private javax.swing.JTextField searchVar1;
+    private javax.swing.JTextField searchVar3;
+    private javax.swing.JPanel settingPanel;
+    private javax.swing.JPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }
