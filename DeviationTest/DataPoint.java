@@ -11,11 +11,13 @@ public class DataPoint {
 private LocalDateTime time;
 private double temperature;
 private boolean viability;
+private double originalTemperature;
 
 public DataPoint(LocalDateTime time, double temperature) {
 	this.time = time;
 	this.temperature = temperature;
 	viability = true;
+	originalTemperature = temperature;
 }
 
 public double getTemperature() {
@@ -36,6 +38,10 @@ public boolean getViability() {
 
 public void setViability(boolean newViability) {
 	viability = newViability;
+}
+
+public double getUnmodifiedTemperature() {
+	return originalTemperature;
 }
 
 }

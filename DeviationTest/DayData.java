@@ -40,6 +40,11 @@ public class DayData {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param soughtTime
+	 * @return the data point at a required time
+	 */
 	public DataPoint getDataFromTime(LocalDateTime soughtTime) {
 		
 		//iterate through list looking for a specific time (assuming chronological entry)
@@ -68,6 +73,15 @@ public class DayData {
 	return null;
 	}
 	
+	/**
+	 * THis is for if a particular data set is missing for a particular time. An alternative to using a mean
+	 * @param time1
+	 * @param temp1
+	 * @param time2
+	 * @param temp2
+	 * @param soughtTime
+	 * @return
+	 */
 	private double temperatureInterpolator(LocalDateTime time1, double temp1, LocalDateTime time2, double temp2, LocalDateTime soughtTime) {
 	double interpolatedTemperature = 0.0;
 	long time1EpochSeconds = time1.toEpochSecond(OffsetDateTime.now().getOffset());
@@ -83,10 +97,15 @@ public class DayData {
 		timeDuration = time1EpochSeconds = time2EpochSeconds;
 		interpolatedTemperature = (double) (temp2 + (temp1 - temp2) * (soughtTimeEpochSeconds - time2EpochSeconds)/timeDuration);
 	}
-	
 	return interpolatedTemperature;
 	}
 	
+	
+	/**
+	 * 
+	 * @param queryTime
+	 * @return if a dataset already exists for a certain time
+	 */
 	public boolean timeAlreadyExists(LocalDateTime queryTime) {
 		boolean exists = false;
 		for(int i = 0 ; i < dailyData.size(); i++) {
