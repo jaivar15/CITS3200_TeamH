@@ -39,7 +39,7 @@ public class responder {
         }
     }
 
-    public void removeID(int ID){
+    public void removeAnimal(int ID){
         if(IDtoEmails.containsKey(ID)){
             for(String s: IDtoEmails.get(ID).getMailAddress()){
                 emailsToIDs.get(s).remove(ID);
@@ -48,9 +48,9 @@ public class responder {
         }
     }
 
-    public void removeMutiID(int[] ID){
+    public void removeMutiAnimal(int[] ID){
         for(int i = 0; i < ID.length; i++){
-            removeID(ID[i]);
+            removeAnimal(ID[i]);
         }
     }
 
@@ -66,7 +66,23 @@ public class responder {
         }
     }
 
+    public void removeEmail(String email){
+        if(emailsToIDs.containsKey(email) && emailToName.containsKey(email)){
+            for(Integer ID : emailsToIDs.get(email)){
+                IDtoEmails.get(ID).removeAddress(email);
+            }
+            emailsToIDs.remove(email);
+            emailToName.remove(email);
+        }
+    }
 
+    public void backUp(Object[] o){
+        IDtoEmails = (HashMap<Integer,senderAddress>)o[0];
+        emailToName = (HashMap<String,String>)o[1];
+        animalIDtoName = (HashMap<Integer,String>)o[2];
+        emailsToIDs = (HashMap<String, HashSet<Integer> >)o[3];
+
+    }
 
     public HashMap<Integer,senderAddress> getResponderMap(){
         return IDtoEmails;
