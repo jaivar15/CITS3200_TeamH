@@ -698,7 +698,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ChoseFileButton)
-                    .addComponent(lblFile))
+                    .addComponent(lblFile, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(Submit)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1002,10 +1002,11 @@ public class Home extends javax.swing.JFrame {
                     try {
                         String fileName = j.getSelectedFile().getAbsolutePath();
                         lblFile.setText(fileName);
+                        fileName(fileName);
                     } catch (NullPointerException ex) {
+                        
                     }
                 }
-        fileName();
     }//GEN-LAST:event_ChoseFileButtonActionPerformed
 
     private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
@@ -1101,8 +1102,8 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
-    private void fileName(){
-        String fileName = "";
+    private void fileName(String fileName){
+        //String fileName = "";
         lblFile = new JLabel(fileName);
         lblFile.setBounds(394, 99, 92, 26);
         addAnimalPanel.add(lblFile);
@@ -1119,9 +1120,9 @@ public class Home extends javax.swing.JFrame {
                     String filePath = lblFile.getText();
 
                     //TODO
-                    //Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
-                    //serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\CITS3200","test");
-                    //ser.SerializeObject();
+                    Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
+                    serialization ser = new serialization(data, "/Users/toomato/Desktop","test");
+                    ser.SerializeObject();
 
                     JOptionPane.showMessageDialog(null, "Added successfully");
                     //close();
