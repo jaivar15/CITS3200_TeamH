@@ -16,31 +16,31 @@ public class responder {
         animalIDtoName = new HashMap<>();
     }
 
-    public void addResponder(int ID,String Name, String address){
-        if(IDtoEmails.containsKey(ID)){
+    public void addResponder(int ID, String address){
+        if(emailToName.containsKey(address) && animalIDtoName.containsKey(ID)){
+            if( !IDtoEmails.containsKey(ID)){
+                IDtoEmails.put(ID,new senderAddress());
+            }
             IDtoEmails.get(ID).addNewAddress(address);
-            emailsToIDs.get(address).add(ID);
 
+            if(!emailsToIDs.containsKey(address)){
+                emailsToIDs.put(address,new HashSet<>());
+            }
+            emailsToIDs.get(address).add(ID);
         }else{
-            IDtoEmails.put(ID, new senderAddress());
-            IDtoEmails.get(ID).addNewAddress(address);
-            emailsToIDs.put(address,new HashSet<>() );
-            emailsToIDs.get(address).add(ID);
-        }
-
-        if(!emailToName.containsKey(address)){
-            emailToName.put(address,Name);
+            //TODO show that email or animal does not exist
         }
     }
 
-    public void addMutiResponder(int[] id,String[] names, String address){
+    public void addMutiResponder(int[] id, String address){
         for(int i = 0; i < id.length ; i++){
-            addResponder(id[i], names[i], address);
+            addResponder(id[i], address);
         }
     }
 
     public void removeAnimal(int ID){
         if(IDtoEmails.containsKey(ID)){
+            animalIDtoName.remove(ID);
             for(String s: IDtoEmails.get(ID).getMailAddress()){
                 emailsToIDs.get(s).remove(ID);
             }
@@ -102,5 +102,29 @@ public class responder {
 
     public void setEmailsToIDs(HashMap<String,HashSet<Integer> > emailsToIDs) {
         this.emailsToIDs = emailsToIDs;
+    }
+
+    public String toString(){
+        String s = "Animals ID to Emails\n";
+        for(Integer i : IDtoEmails.keySet()){
+            s+= "" + i + "  " + IDtoEmails.get(i).toString() + "\n";
+        }
+        s+= "\nemail to name \n";
+
+        for(String ss :  emailToName.keySet()){
+            s+= ss + "  " +emailToName.get(ss) + "\n";
+        }
+        s+= "\nanimal id to name\n";
+
+        for(Integer i : animalIDtoName.keySet()){
+            s+="" + i +"  " +animalIDtoName.get(i) + "\n";
+        }
+         s+="\nemails to IDs\n";
+
+        for(String ss : emailsToIDs.keySet()){
+            s+=ss+"  " +emailsToIDs.get(ss).toString();
+        }
+
+        return s;
     }
 }

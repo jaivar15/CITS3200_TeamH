@@ -1,3 +1,5 @@
+package com.company;
+
 import java.util.HashSet;
 
 public class senderAddress {
@@ -23,5 +25,11 @@ public class senderAddress {
 
     public HashSet<String> getMailAddress(){
         return mailAddresses;
+    }
+
+    public String toString(){
+        String s = "";
+        s += mailAddresses.toString();
+        return s;
     }
 }
