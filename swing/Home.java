@@ -23,13 +23,33 @@ import java.util.ArrayList;
  */
 public class Home extends javax.swing.JFrame {
     private JComboBox choiceBox;
-    DefaultTableModel model ;
+    private DefaultTableModel model ;
     private ArrayList<?>[][] animalInfo;
     private int size;
+    private responder user;
+    private ArrayList<String> AnimalName;
     /**
      * Creates new form Home
      */
     public Home() {
+        AnimalName = new ArrayList<String>();
+        AnimalName.add("cat");
+        AnimalName.add("cat1");
+        AnimalName.add("cat2");
+        AnimalName.add("cat3");
+        user = new responder();
+        animalInfo = new ArrayList<?>[1][10];
+        frame = new JFrame("Display Mode");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setUndecorated(true);
+        initComponents();
+        setUpModel();
+        setColor(btn_1); 
+        resetColor(new JPanel[]{btn_4,btn_3,btn_5,btn_2});
+    }
+    
+    public Home(Object[] o){
+        user = new responder((Object[])o[1]);
         animalInfo = new ArrayList<?>[1][10];
         frame = new JFrame("Display Mode");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -41,10 +61,11 @@ public class Home extends javax.swing.JFrame {
     }
 
     
-    private void setUpModel(){
+    private void setUpModel(){        
+        Object oo [][] = user.UserInfoOutPut();
         
         UserTable.setModel(new javax.swing.table.DefaultTableModel(
-            animalInfo,
+            oo,
             new String [] {
                 "Name", "Email", "Animal Responsed",
             }
@@ -98,7 +119,7 @@ public class Home extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -122,7 +143,7 @@ public class Home extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, true
@@ -175,13 +196,15 @@ public class Home extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         HomeTable = new javax.swing.JTable();
         usersPanel = new javax.swing.JPanel();
-        searchVar1 = new javax.swing.JTextField();
+        EmailAccountText = new javax.swing.JTextField();
         EmailNameText = new javax.swing.JTextField();
         EmailNameTextLable = new javax.swing.JLabel();
         EmailAccountTextLabel = new javax.swing.JLabel();
         AddIntoButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         UserTable = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        AnimalList = new javax.swing.JList<>();
         addAnimalPanel = new javax.swing.JPanel();
         AnimalNameText = new javax.swing.JTextField();
         StandDeviationText = new javax.swing.JTextField();
@@ -234,14 +257,6 @@ public class Home extends javax.swing.JFrame {
         HomeTextLabel.setFont(new java.awt.Font("Segoe Script", 2, 18)); // NOI18N
         HomeTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         HomeTextLabel.setText("Home");
-        HomeTextLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                HomeMoseClick(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                homeMoseEnter(evt);
-            }
-        });
 
         HomeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Home.png"))); // NOI18N
 
@@ -496,21 +511,16 @@ public class Home extends javax.swing.JFrame {
 
         usersPanel.setBackground(new java.awt.Color(153, 204, 255));
 
-        searchVar1.setBackground(new java.awt.Color(42, 75, 115));
-        searchVar1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        searchVar1.addActionListener(new java.awt.event.ActionListener() {
+        EmailAccountText.setBackground(new java.awt.Color(42, 75, 115));
+        EmailAccountText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        EmailAccountText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchVar1ActionPerformed(evt);
+                EmailAccountTextActionPerformed(evt);
             }
         });
 
         EmailNameText.setBackground(new java.awt.Color(42, 75, 115));
         EmailNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        EmailNameText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EmailNameTextActionPerformed(evt);
-            }
-        });
 
         EmailNameTextLable.setText("Email Name");
 
@@ -525,24 +535,35 @@ public class Home extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(UserTable);
 
+        AnimalList.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return AnimalName.size(); }
+            public String getElementAt(int i) { return AnimalName.get(i); }
+        });
+        jScrollPane5.setViewportView(AnimalList);
+
         javax.swing.GroupLayout usersPanelLayout = new javax.swing.GroupLayout(usersPanel);
         usersPanel.setLayout(usersPanelLayout);
         usersPanelLayout.setHorizontalGroup(
             usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(usersPanelLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(15, 15, 15)
+                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(EmailAccountTextLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(usersPanelLayout.createSequentialGroup()
                         .addComponent(EmailNameTextLable)
-                        .addGap(36, 36, 36)
-                        .addComponent(EmailNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(usersPanelLayout.createSequentialGroup()
-                        .addComponent(EmailAccountTextLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddIntoButton)
-                            .addComponent(searchVar1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                            .addComponent(EmailNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EmailAccountText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(39, 39, 39))
+                    .addGroup(usersPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
+                        .addComponent(AddIntoButton)
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -557,10 +578,12 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(EmailNameTextLable))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(searchVar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EmailAccountText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EmailAccountTextLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddIntoButton))
+                        .addGap(18, 18, 18)
+                        .addGroup(usersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddIntoButton)))
                     .addGroup(usersPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -642,33 +665,34 @@ public class Home extends javax.swing.JFrame {
         addAnimalPanelLayout.setHorizontalGroup(
             addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
                 .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addAnimalPanelLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
                         .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AnimalNameLabel)
-                            .addComponent(StandardDeviationLabel)
-                            .addComponent(AnimalDescriptionLabel)
-                            .addComponent(NumberOfDaysLable)
-                            .addComponent(DurationLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(StandDeviationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NumberOfDaysText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DurationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Submit)
                             .addGroup(addAnimalPanelLayout.createSequentialGroup()
-                                .addComponent(ChoseFileButton)
+                                .addGap(93, 93, 93)
+                                .addComponent(Submit))
+                            .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                                .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AnimalNameLabel)
+                                    .addComponent(StandardDeviationLabel)
+                                    .addComponent(AnimalDescriptionLabel)
+                                    .addComponent(NumberOfDaysLable)
+                                    .addComponent(DurationLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblFile, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                                .addGroup(addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(StandDeviationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AnimalNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(NumberOfDaysText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(DurationText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap())
+                    .addGroup(addAnimalPanelLayout.createSequentialGroup()
+                        .addComponent(ChoseFileButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFile, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))))
         );
         addAnimalPanelLayout.setVerticalGroup(
             addAnimalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -876,6 +900,11 @@ public class Home extends javax.swing.JFrame {
                 AdvanceFeatureButtonMousePressed(evt);
             }
         });
+        AdvanceFeatureButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdvanceFeatureButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout settingPanelLayout = new javax.swing.GroupLayout(settingPanel);
         settingPanel.setLayout(settingPanelLayout);
@@ -911,14 +940,6 @@ public class Home extends javax.swing.JFrame {
     private void searchVarTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchVarTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchVarTextActionPerformed
-
-    private void HomeMoseClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMoseClick
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HomeMoseClick
-
-    private void homeMoseEnter(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMoseEnter
-        // TODO add your handling code here:
-    }//GEN-LAST:event_homeMoseEnter
 
     private void btn_1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_1MousePressed
         // TODO add your handling code here:
@@ -982,13 +1003,9 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_DurationTextActionPerformed
 
-    private void searchVar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchVar1ActionPerformed
+    private void EmailAccountTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailAccountTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchVar1ActionPerformed
-
-    private void EmailNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailNameTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EmailNameTextActionPerformed
+    }//GEN-LAST:event_EmailAccountTextActionPerformed
 
     private void ChoseFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChoseFileButtonActionPerformed
         // TODO add your handling code here:
@@ -1016,6 +1033,19 @@ public class Home extends javax.swing.JFrame {
 
     private void AddIntoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddIntoButtonActionPerformed
         // TODO add your handling code here:
+        String name = EmailNameText.getText();
+        String account = EmailAccountText.getText();
+        if(!name.equals("") && !account.equals("")){
+            boolean check;
+            if((check = user.newUser(name, account)) == true){
+                DefaultTableModel UserTableModel = (DefaultTableModel) UserTable.getModel();
+                Object[] o = {name,account};
+                UserTableModel.addRow(o);
+            }else{
+                JOptionPane.showMessageDialog(null, "user exist in system");
+            }
+        }else JOptionPane.showMessageDialog(null, "Please fill in all fields");
+       UserTable.repaint();
     }//GEN-LAST:event_AddIntoButtonActionPerformed
 
     private void ChangeStandDeviationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeStandDeviationTextActionPerformed
@@ -1044,8 +1074,12 @@ public class Home extends javax.swing.JFrame {
 
     private void ChangeIDButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangeIDButtonMousePressed
         // TODO add your handling code here:
-        checkInput2();
-        changeIdTable.updateUI();
+        checkUserPanelInput();
+        DefaultTableModel model = (DefaultTableModel) changeIdTable.getModel();
+        Object[] o = {ChangeAnimalNameText.getText(),ChangeAnimalDescriptionText.getText(),Double.valueOf(ChangeStandDeviationText.getText()),
+        Integer.valueOf(ChangeNumberOfDaysText.getText()),Double.valueOf(ChangeDurationText.getText()),false};
+        model.addRow(o);
+        changeIdTable.repaint();
     }//GEN-LAST:event_ChangeIDButtonMousePressed
 
     private void ApplicationPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplicationPasswordButtonActionPerformed
@@ -1064,6 +1098,11 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_AdvanceFeatureButtonMousePressed
 
+    private void AdvanceFeatureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdvanceFeatureButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AdvanceFeatureButtonActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -1146,12 +1185,12 @@ public class Home extends javax.swing.JFrame {
             }
             
             if(!returnSt.get()) {
-                JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file");
+                JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file 1");
             }
             return returnSt.get();
         }
     
-    private boolean checkInput2() {
+    private boolean checkUserPanelInput() {
             AtomicBoolean returnSt = new AtomicBoolean(true);
             if (ChangeAnimalNameText.getText().equals("")) {
                 returnSt.set(false);
@@ -1162,7 +1201,7 @@ public class Home extends javax.swing.JFrame {
                 returnSt.set(false);
             }
             if(!returnSt.get()) {
-                JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file");
+                JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file 2");
             }
             return returnSt.get();
         }
@@ -1193,6 +1232,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton AdvanceFeatureButton;
     private javax.swing.JLabel AnimalDescriptionLabel;
     private javax.swing.JTextField AnimalDescriptionText;
+    private javax.swing.JList<String> AnimalList;
     private javax.swing.JLabel AnimalNameLabel;
     private javax.swing.JTextField AnimalNameText;
     private javax.swing.JLabel AnimaliconLabel;
@@ -1212,6 +1252,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton ChoseFileButton;
     private javax.swing.JLabel DurationLabel;
     private javax.swing.JTextField DurationText;
+    private javax.swing.JTextField EmailAccountText;
     private javax.swing.JLabel EmailAccountTextLabel;
     private javax.swing.JTextField EmailNameText;
     private javax.swing.JLabel EmailNameTextLable;
@@ -1250,8 +1291,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblFile;
-    private javax.swing.JTextField searchVar1;
     private javax.swing.JTextField searchVarText;
     private javax.swing.JPanel settingPanel;
     private javax.swing.JPanel usersPanel;
