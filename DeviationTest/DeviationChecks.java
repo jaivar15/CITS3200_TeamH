@@ -16,10 +16,10 @@ public class DeviationChecks {
 	 * @param advancedNotification
 	 * @return returnArray with index 0 indicating if notification is required and 1 is the ratio of standard deviations from acceptable deviations
 	 */
-	public double[] checkDeviation(DaySets daySet , double acceptableDeviation, int daysToAverage, boolean advancedNotification) {
+	public static double[] checkDeviation(DaySets daySet , double acceptableDeviation, int daysToAverage, boolean advancedNotification) {
 	double[] returnArray = new double[2];	
-	
 	HistoricTemperatures pastTemperatures = new HistoricTemperatures(daySet, daysToAverage, daySet.getLatestUpdate().getTime());
+	pastTemperatures.getStandardDeviation();/////////////////stop coding here
 	double currentDeviation = Math.abs(pastTemperatures.getMean() - daySet.getLatestUpdate().getTemperature());
 	returnArray[1] = currentDeviation/acceptableDeviation;
 	
@@ -35,10 +35,15 @@ public class DeviationChecks {
 	 * @param daySet
 	 * @param daysToAverage
 	 */
-	public void cleanDatapoint(DaySets daySet, int daysToAverage) {
+	public static void cleanDatapoint(DaySets daySet, int daysToAverage) {
 		HistoricTemperatures pastTemperatures = new HistoricTemperatures(daySet, daysToAverage, daySet.getLatestUpdate().getTime());
 		double newTemperature = pastTemperatures.getMean();
 		daySet.getLatestUpdate().modifyTemperature(newTemperature);
 		daySet.getLatestUpdate().setViability(false);
+	}
+	
+	public static double getDeviationFromMean(DaySets daySet, int daysToAverage) {
+		HistoricTemperatures pastTemperatures = new HistoricTemperatures(daySet, daysToAverage, daySet.getLatestUpdate().getTime());
+		return Math.abs(daySet.getLatestUpdate().getTemperature() - pastTemperatures.getMean());
 	}
 }

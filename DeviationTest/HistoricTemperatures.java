@@ -12,21 +12,28 @@ private double mean;
 private double standardDeviation;
 	
 	public HistoricTemperatures(DaySets daySet, int daysToGather, LocalDateTime timeOfDay) {
-		for(int i = 0 ; i < daysToGather ; i++) {
+		int limitDays = 0;
+		if(daySet.daysOfData() > daysToGather) {
+			limitDays = daysToGather;
+		}else limitDays = daySet.daysOfData() - 1;
+		
+		historicTemperatures = new double[limitDays];
+		
+		for(int i = 0 ; i < limitDays ; i++) {
 			historicTemperatures[i] = daySet.getTemperatureFromTime(daySet.getLatestUpdate().getTime().minusDays(i + 1));
 		}
 		
 		double totalTemp = 0;
-		for(int i = 0 ; i < daysToGather ; i++) {
+		for(int i = 0 ; i < limitDays ; i++) {
 			totalTemp += historicTemperatures[i];
 		}
-		mean = totalTemp/daysToGather;
+		mean = totalTemp/limitDays;
 		
-		double stdDevTotal = 0;
-		for(int i = 0 ; i < daysToGather ; i++) {
-			stdDevTotal += Math.pow(mean - historicTemperatures[i], 2);
+		double varianceTotal = 0;
+		for(int i = 0 ; i < limitDays ; i++) {
+			varianceTotal += Math.pow(mean - historicTemperatures[i], 2);
 		}
-		standardDeviation = stdDevTotal/daysToGather;
+		standardDeviation = Math.sqrt(varianceTotal/(double)limitDays);
 	}
 	
 	public double[] getHistoricTemperatures() {
@@ -40,6 +47,5 @@ private double standardDeviation;
 	public double getStandardDeviation() {
 		return standardDeviation;
 	}
-	
 	
 }

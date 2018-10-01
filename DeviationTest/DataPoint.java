@@ -44,4 +44,11 @@ public double getUnmodifiedTemperature() {
 	return originalTemperature;
 }
 
+public boolean isEqualTo(DataPoint secondDataPoint) {
+	if((secondDataPoint.getTemperature() == temperature) && (secondDataPoint.getTime().compareTo(time) == 0)) {
+		return true;
+	}
+	else return false;
+}
+
 }

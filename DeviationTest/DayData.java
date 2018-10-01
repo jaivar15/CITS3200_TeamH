@@ -34,7 +34,7 @@ public class DayData {
 	
 	public void removeDailyData(LocalDateTime timeToRemove) {
 		for(int i = 0 ; i < dailyData.size(); i++) {
-			if(dailyData.get(i).getTime() == timeToRemove) {
+			if(dailyData.get(i).getTime().compareTo(timeToRemove) == 0) {
 				dailyData.remove(i);
 			}
 		}
@@ -109,7 +109,7 @@ public class DayData {
 	public boolean timeAlreadyExists(LocalDateTime queryTime) {
 		boolean exists = false;
 		for(int i = 0 ; i < dailyData.size(); i++) {
-			if(dailyData.get(i).getTime() == queryTime) {
+			if(dailyData.get(i).getTime().isEqual(queryTime)) {
 				exists = true;
 			}
 		}

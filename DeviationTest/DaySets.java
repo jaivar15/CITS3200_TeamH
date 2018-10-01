@@ -35,6 +35,7 @@ public ArrayList<DayData> getDayGroups() {
 	return dayGroups;
 }
 
+
 /**
  * 
  * @param dayToGet is the date of the day to retrieve data for
@@ -42,12 +43,13 @@ public ArrayList<DayData> getDayGroups() {
  */
 public DayData getDayData(LocalDate dayToGet) {
 	for(int i = 0 ; i < dayGroups.size(); i++) {
-		if(dayGroups.get(i).getDayGrouping() == dayToGet) {
+		if(dayGroups.get(i).getDayGrouping().isEqual(dayToGet)) {
 			return dayGroups.get(i);
 		}
 	}
 	return null;
 }
+
 
 /**
  * 
@@ -57,7 +59,7 @@ public DayData getDayData(LocalDate dayToGet) {
 public DataPoint getDataPointFromTime(LocalDateTime timeToFind) {
 	DayData dayThatContains = null;
 	for(int i = 0 ; i < dayGroups.size(); i ++) {
-		if(dayGroups.get(i).getDayGrouping() == timeToFind.toLocalDate()) {
+		if(dayGroups.get(i).getDayGrouping().isEqual(timeToFind.toLocalDate())) {
 			dayThatContains = dayGroups.get(i);
 			break;
 		}
@@ -82,7 +84,7 @@ public double getTemperatureFromTime(LocalDateTime timeToFind) {
 public void addDataPoint(LocalDateTime newTime, double newTemperature) {
 	boolean dayExists = false;
 	for(int i = 0 ; i < dayGroups.size(); i++) {
-		if(dayGroups.get(i).getDayGrouping() == newTime.toLocalDate()) {
+		if(dayGroups.get(i).getDayGrouping().isEqual(newTime.toLocalDate())) {
 			if(dayGroups.get(i).timeAlreadyExists(newTime)) {
 				dayExists = true;
 			}else {
@@ -97,6 +99,26 @@ public void addDataPoint(LocalDateTime newTime, double newTemperature) {
 		dayGroups.add(newDay);
 	}
 }
+
+public void addDataPoint(DataPoint newDataPoint) {
+	boolean dayExists = false;
+for(int i = 0 ; i < dayGroups.size(); i++) {
+	if(dayGroups.get(i).getDayGrouping().isEqual(newDataPoint.getTime().toLocalDate())) {
+		if(dayGroups.get(i).timeAlreadyExists(newDataPoint.getTime())) {
+			dayExists = true;
+		}else {
+			dayGroups.get(i).addDailyData(newDataPoint);
+			dayExists = true;
+		}
+	}
+}
+if(!dayExists) {
+	DayData newDay = new DayData(newDataPoint.getTime().toLocalDate());
+			newDay.addDailyData(newDataPoint);
+			dayGroups.add(newDay);
+	}
+}
+
 
 /**
  * 
