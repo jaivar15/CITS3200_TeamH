@@ -1,71 +1,125 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+package parser;
+
+import DeviationTest.DataPoint;
+import DeviationTest.DaySets;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CSVMonitor {
+public class CSVMonitor extends Thread{
 	
 	private int charCount, lineCount;
 	private BufferedReader reader;
 	private Timer timer = new Timer();
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 	private String delimiter, sensorID;
-	private List<Pair> Data;
+	private DaySets data;
+	private AtomicBoolean stop = new AtomicBoolean(false);
+	private Boolean initialRead = true;
 	
-	public CSVMonitor(String l){
+	public CSVMonitor(String filePath, int startLine) {
 		charCount = 0;
 		lineCount = 0;
 		delimiter = ",";
 		sensorID = "";
-		Data = new ArrayList<>();
+		data = new DaySets();
 		try {
-			reader = new BufferedReader(new FileReader(l));
+			reader = new BufferedReader(new FileReader(filePath));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		for (; lineCount < startLine; lineCount++) {
+			try {
+				reader.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		ReadCSV();
+		initialRead = false;
 	}
 	
-	public void ReadCSV() {
+	public CSVMonitor(String filePath){
+		this(filePath, 0);
+	}
+	
+	public DataPoint ReadCSV() {
 		String[] line = new String[2];
+		DataPoint p = null;
 		try {
 			while ((line[0] = reader.readLine()) != null) {
-				if (line[0].length() == 0){
+				if (line[0].length() == 0) {
 					continue;
 				}
 				charCount += line[0].length();
 				line = line[0].split(delimiter);
-				if(lineCount == 0){
+				if (lineCount == 0) {
 					sensorID = line[1];
 					lineCount++;
 					continue;
 				}
 				try {
-					Pair p = new Pair(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[1]));
-					Data.add(p);
+					p = new DataPoint(LocalDateTime.parse(line[0], formatter), Double.parseDouble(line[1]));
+					if (initialRead && data.getLatestUpdate() != null){
+						if(!data.getLatestUpdate().isEqualTo(p)){
+							data.addDataPoint(p);
+						}
+					} else if (initialRead && data.getLatestUpdate() == null){
+						data.addDataPoint(p);
+					}
 				} catch (DateTimeParseException e) {
 					e.printStackTrace();
 				}
 				lineCount++;
 			}
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		return p;
+	}
+	
+	public DaySets getData() {
+		return data;
+	}
+	
+	public boolean isStopped() { return stop.get(); }
+	
+	public void stopThread() { stop.set(true); }
+	
+	
+	@Override
+	public void run() {
+		while (!isStopped()){
+			DataPoint fromFile = ReadCSV();
+			DataPoint latest = data.getLatestUpdate();
+				if (!latest.isEqualTo(fromFile)) {
+					data.addDataPoint(fromFile);
+				}
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	public List<Pair> getMostRecentData(int listLength){
-		return Data.subList(Data.size()-listLength,Data.size());
+	public String getSensorID(){
+		return sensorID;
 	}
 	
-	public List<Pair> getData(){
-		return Data;
+	public void setSensorID(String s){
+		sensorID = s;
 	}
-
+	
+	//Legacy Code
+	/*
+	public List<Pair> getMostRecentData(int listLength) {
+		return Data.subList(Data.size() - listLength, Data.size());
+	}
+	
 	//////////////////////////////////////////////////////////////////
 	
 	public Pair getPairFromTime(LocalDateTime soughtTime) {
@@ -93,7 +147,7 @@ public class CSVMonitor {
 	return null;
 	}
 	
-	/////////////////////////////////////////////////////////////////////	
+	/////////////////////////////////////////////////////////////////////
 	
 	
 }
@@ -126,4 +180,7 @@ class Pair {
 		String str = formatter.format(dateTime) + ", " + String.format("%.3f", temp);
 		return str;
 	}
+}
+
+*/
 }

@@ -125,6 +125,7 @@ if(!dayExists) {
  * @return the latest chronological data set
  */
 public DataPoint getLatestUpdate() {
+	if (daysOfData() == 0) return null;
 	DayData latestDay = dayGroups.get(0);
 Iterator<DayData> dayDataIterator = dayGroups.iterator();
 while(dayDataIterator.hasNext()) {
