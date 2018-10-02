@@ -36,7 +36,7 @@ class AnimalDataSetTest {
 	}
 
 	@Test
-	void testDaySets() {
+	void testAnimalDataSets() {
 		addData();
 		assertTrue(animalOneData.getClass() != null);
 	}
@@ -101,6 +101,14 @@ class AnimalDataSetTest {
 		assertEquals(3, animalOneData.daysOfDataCount());
 		addData();
 		assertEquals(3, animalOneData.daysOfDataCount());
+	}
+	
+	@Test
+	void testTimeAlreadyRecorded() {
+		addData();
+		assertTrue(animalOneData.timeAlreadyRecorded(timeNow));
+		assertTrue(animalOneData.timeAlreadyRecorded(times[6]));
+		assertFalse(animalOneData.timeAlreadyRecorded(timeNow.minusDays(10)));
 	}
 
 	@Test

@@ -71,12 +71,4 @@ class DayDataTest {
 		assertEquals(25, dayDataSet.getDataFromTime(timeNow.plusMinutes(30)).getTemperature());
 		assertEquals(19.5, dayDataSet.getDataFromTime(timeNow.plusMinutes(90)).getTemperature());
 	}
-
-	@Test
-	void testTimeAlreadyExists() {
-		addDataPoints();
-		assertTrue(dayDataSet.timeAlreadyExists(timeNow.plusHours(2)));
-		assertFalse(dayDataSet.timeAlreadyExists(timeNow.plusHours(6)));
-		assertTrue(dayDataSet.timeAlreadyExists(timeNow.plusMinutes(120)));
-	}
 }

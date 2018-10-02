@@ -100,20 +100,4 @@ public class DayData {
 	return interpolatedTemperature;
 	}
 	
-	
-	/**
-	 * 
-	 * @param queryTime
-	 * @return if a dataset already exists for a certain time
-	 */
-	public boolean timeAlreadyExists(LocalDateTime queryTime) {
-		boolean exists = false;
-		for(int i = 0 ; i < fullDayDataArray.size(); i++) {
-			if(fullDayDataArray.get(i).getTime().isEqual(queryTime)) {
-				exists = true;
-			}
-		}
-		return exists;
-	}
-	
 }
