@@ -17,47 +17,47 @@ class DayDataTest {
 	DayData dayDataSet = new DayData(LocalDate.now());
 
 	public void addDataPoints() {
-		dayDataSet.addDailyData(pointOne);
-		dayDataSet.addDailyData(pointTwo);
-		dayDataSet.addDailyData(pointThree);
-		dayDataSet.addDailyData(pointFour);
-		dayDataSet.addDailyData(pointFive);
+		dayDataSet.addDataPointToDay(pointOne);
+		dayDataSet.addDataPointToDay(pointTwo);
+		dayDataSet.addDataPointToDay(pointThree);
+		dayDataSet.addDataPointToDay(pointFour);
+		dayDataSet.addDataPointToDay(pointFive);
 	}
 	
 	@Test
 	void testDayData() {
 		addDataPoints();
-		assertTrue(dayDataSet.getDailyData().size() != 0);
+		assertTrue(dayDataSet.getFullDayDataArray().size() != 0);
 	}
 
 	@Test
-	void testGetDayGrouping() {
+	void testGetDayDateGrouping() {
 		addDataPoints();
-		assertEquals(LocalDate.now(), dayDataSet.getDayGrouping());
+		assertEquals(LocalDate.now(), dayDataSet.getDayDateGrouping());
 	}
 
 	@Test
-	void testGetDailyData() {
+	void testGetFullDayDataArray() {
 		addDataPoints();
-		assertEquals(5, dayDataSet.getDailyData().size());
+		assertEquals(5, dayDataSet.getFullDayDataArray().size());
 	}
 
 	@Test
-	void testAddDailyData() {
+	void testAddDataPointToDay() {
 		addDataPoints();
-		assertEquals(32, dayDataSet.getDailyData().get(4).getTemperature());
+		assertEquals(32, dayDataSet.getFullDayDataArray().get(4).getTemperature());
 	}
 
 	@Test
-	void testRemoveDailyData() {
+	void testRemoveFromDayData() {
 		addDataPoints();
-		dayDataSet.removeDailyData(timeNow.plusHours(2));
-		assertEquals(4, dayDataSet.getDailyData().size());
-		dayDataSet.removeDailyData(timeNow);
-		assertEquals(3, dayDataSet.getDailyData().size());
-		dayDataSet.removeDailyData(timeNow.plusHours(1));
-		dayDataSet.removeDailyData(timeNow.plusHours(3));
-		DataPoint pointLeft = dayDataSet.getDailyData().get(0);
+		dayDataSet.removeFromDayData(timeNow.plusHours(2));
+		assertEquals(4, dayDataSet.getFullDayDataArray().size());
+		dayDataSet.removeFromDayData(timeNow);
+		assertEquals(3, dayDataSet.getFullDayDataArray().size());
+		dayDataSet.removeFromDayData(timeNow.plusHours(1));
+		dayDataSet.removeFromDayData(timeNow.plusHours(3));
+		DataPoint pointLeft = dayDataSet.getFullDayDataArray().get(0);
 		assertEquals(32, pointLeft.getTemperature());
 		assertEquals(times[4], pointLeft.getTime());
 	}

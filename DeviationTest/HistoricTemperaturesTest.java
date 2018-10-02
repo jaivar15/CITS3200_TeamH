@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class HistoricTemperaturesTest {
 
-	DaySets animalOneData = new DaySets();
+	AnimalDataSet animalOneData = new AnimalDataSet();
 	LocalDateTime timeNow = LocalDateTime.now().minusHours(20);
 	LocalDateTime[] times = {timeNow, timeNow.minusDays(1), timeNow.minusDays(2), timeNow.minusDays(3), timeNow.minusDays(4)};
 	double[] temperatures = {30, 20, 19, 35, 32};
@@ -28,39 +28,39 @@ class HistoricTemperaturesTest {
 	@Test
 	void testHistoricTemperatures() {
 		addData();
-		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4, timeNow);
+		HistoricTemperatures historyCustom = new HistoricTemperatures(animalOneData, 2, times[1]);
+		assertEquals(HistoricTemperatures.class, historyCustom.getClass());
+		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4);
 		assertTrue(history != null);
 		assertEquals(HistoricTemperatures.class, history.getClass());
-		HistoricTemperatures historyOverload = new HistoricTemperatures(animalOneData, 10, timeNow);
+		HistoricTemperatures historyOverload = new HistoricTemperatures(animalOneData, 10);
 		assertEquals(4, historyOverload.getHistoricTemperatures().length);
 	}
 
 	@Test
 	void testGetHistoricTemperatures() {
 		addData();
-		assertEquals(5, animalOneData.daysOfData());
-		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4, timeNow);
+		assertEquals(5, animalOneData.daysOfDataCount());
+		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4);
 		double[] actualHistoricTemps = {20, 19, 35, 32};
 		assertTrue(Arrays.equals(history.getHistoricTemperatures(), actualHistoricTemps));
+		HistoricTemperatures historyCustom = new HistoricTemperatures(animalOneData, 3, times[1]);
+		double[] actualHistoricTempsCustom = {19, 35, 32};
+		assertTrue(Arrays.equals(historyCustom.getHistoricTemperatures(), actualHistoricTempsCustom));
 	}
 
 	@Test
 	void testGetMean() {
 		addData();
-		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4, timeNow);
+		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4);
 		double actualMean = (20 + 19 + 35 + 32)/(double)4;
 		assertEquals(actualMean, history.getMean());
-		HistoricTemperatures historyShorter = new HistoricTemperatures(animalOneData, 3, timeNow);
+		HistoricTemperatures historyShorter = new HistoricTemperatures(animalOneData, 3);
 		double actualMeanShorter = (20 + 19 + 35)/(double)3;
 		assertEquals(historyShorter.getMean(), actualMeanShorter);
-	}
-
-	@Test
-	void testGetStandardDeviation() {
-		addData();
-		HistoricTemperatures history = new HistoricTemperatures(animalOneData, 4, timeNow);
-		System.out.println("Standard Deviation: " + history.getStandardDeviation());
-		assertTrue((7.0887234393789 - history.getStandardDeviation()) <= 0.000001);
+		HistoricTemperatures historyCustom = new HistoricTemperatures(animalOneData, 3, times[1]);
+		double actualMeanCustom = (19 + 35 + 32)/(double)3;
+		assertEquals(actualMeanCustom, historyCustom.getMean());
 	}
 
 }

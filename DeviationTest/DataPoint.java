@@ -51,9 +51,4 @@ public boolean isEqualTo(DataPoint secondDataPoint) {
 	else return false;
 }
 
-@Override
-public String toString() {
-	return time.toString() + ", " + temperature;
-}
-
 }

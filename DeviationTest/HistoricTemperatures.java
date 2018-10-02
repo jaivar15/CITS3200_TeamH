@@ -9,18 +9,22 @@ import java.time.LocalDateTime;
 public class HistoricTemperatures {
 private double[] historicTemperatures;
 private double mean;
-private double standardDeviation;
 	
-	public HistoricTemperatures(DaySets daySet, int daysToGather, LocalDateTime timeOfDay) {
+/**
+ * Constructs historic temperature automatically based on latest added temperature data
+ * @param animalData
+ * @param daysToGather
+ */
+	public HistoricTemperatures(AnimalDataSet animalData, int daysToGather) {
 		int limitDays = 0;
-		if(daySet.daysOfData() > daysToGather) {
+		if(animalData.daysOfDataCount() > daysToGather) {
 			limitDays = daysToGather;
-		}else limitDays = daySet.daysOfData() - 1;
+		}else limitDays = animalData.daysOfDataCount() - 1;
 		
 		historicTemperatures = new double[limitDays];
 		
 		for(int i = 0 ; i < limitDays ; i++) {
-			historicTemperatures[i] = daySet.getTemperatureFromTime(daySet.getLatestUpdate().getTime().minusDays(i + 1));
+			historicTemperatures[i] = animalData.getTemperatureFromTime(animalData.getLatestUpdate().getTime().minusDays(i + 1));
 		}
 		
 		double totalTemp = 0;
@@ -28,13 +32,40 @@ private double standardDeviation;
 			totalTemp += historicTemperatures[i];
 		}
 		mean = totalTemp/limitDays;
-		
-		double varianceTotal = 0;
-		for(int i = 0 ; i < limitDays ; i++) {
-			varianceTotal += Math.pow(mean - historicTemperatures[i], 2);
-		}
-		standardDeviation = Math.sqrt(varianceTotal/(double)limitDays);
 	}
+	
+	/**
+	 * Constructs historic temperature based on a custom time
+	 * @param animalData
+	 * @param daysToGather
+	 * @param customTime
+	 */
+	public HistoricTemperatures(AnimalDataSet animalData, int daysToGather, LocalDateTime customTime) {
+		int limitDays = 0;
+		int numberOfPastDays = 0;
+		for(int i = 0 ; i < animalData.daysOfDataCount(); i++) {
+			if(animalData.getAnimalDataDaysArray().get(i).getDayDateGrouping().isBefore(customTime.toLocalDate())) {
+				numberOfPastDays++;
+			}
+		}
+		if(numberOfPastDays > daysToGather) {
+			limitDays = daysToGather;
+		}else limitDays = numberOfPastDays;
+		
+		historicTemperatures = new double[limitDays];
+		
+		for(int i = 0 ; i < limitDays ; i++) {
+			historicTemperatures[i] = animalData.getTemperatureFromTime(customTime.minusDays(i + 1));
+		}
+		
+		double totalTemp = 0;
+		for(int i = 0 ; i < limitDays ; i++) {
+			totalTemp += historicTemperatures[i];
+		}
+		mean = totalTemp/limitDays;
+	}
+	
+
 	
 	public double[] getHistoricTemperatures() {
 		return historicTemperatures;
@@ -42,10 +73,6 @@ private double standardDeviation;
 	
 	public double getMean() {
 		return mean;
-	}
-	
-	public double getStandardDeviation() {
-		return standardDeviation;
 	}
 	
 }
