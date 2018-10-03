@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.Iterator;
 
 /**
  * HistoricTemperatures will gather temperatures going back a specified number of days for a certain time of the day. This excludes the latest day
@@ -49,8 +50,9 @@ private double mean;
 	public HistoricTemperatures(AnimalDataSet animalData, int daysToGather, LocalDateTime customTime) {
 		int limitDays = 0;
 		int numberOfPastDays = 0;
-		for(int i = 0 ; i < animalData.daysOfDataCount(); i++) {
-			if(animalData.getAnimalDataDaysArray().get(i).getDayDateGrouping().isBefore(customTime.toLocalDate())) {
+		Iterator<DayData> dayDataIterator = animalData.getAnimalDataDaysHashMap().values().iterator();
+		while(dayDataIterator.hasNext()) {
+			if(dayDataIterator.next().getDayDateGrouping().isBefore(customTime.toLocalDate())) {
 				numberOfPastDays++;
 			}
 		}

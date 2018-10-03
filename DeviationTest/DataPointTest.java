@@ -58,12 +58,14 @@ class DataPointTest {
 		
 	}
 	
-	/**
+	
 	@Test
 	void testSetViability() {
-		fail("Not yet implemented");
+		assertTrue(pointOne.getViability());
+		pointOne.setViability(false);
+		assertFalse(pointOne.getViability());
 	}
-	*/
+	
 
 	@Test
 	void testGetUnmodifiedTemperature() {

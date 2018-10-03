@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -11,15 +11,15 @@ import java.util.Iterator;
  *
  */
 public class AnimalDataSet {
-private ArrayList<DayData> animalDataDaysArray;
+private HashMap<LocalDate, DayData> animalDataDaysHashMap;
 private HashSet<LocalDateTime> timesRecorded;
 	
 /**
  * Constructs an empty group of animal days data
  */
 public AnimalDataSet() {
-	animalDataDaysArray = new ArrayList<DayData>();
 	timesRecorded = new HashSet<LocalDateTime>();
+	animalDataDaysHashMap = new HashMap<LocalDate, DayData>();
 }
 	
 /**
@@ -27,7 +27,7 @@ public AnimalDataSet() {
  * @return The number of days worth of data stored in this set
  */
 public int daysOfDataCount() {
-	return animalDataDaysArray.size();
+	return animalDataDaysHashMap.size();
 }
 
 public int dataPointsCount() {
@@ -36,10 +36,10 @@ public int dataPointsCount() {
 	
 /**
  * 
- * @return The array holding the groups of day data
+ * @return The HashMap holding the groups of day data
  */
-public ArrayList<DayData> getAnimalDataDaysArray() {
-	return animalDataDaysArray;
+public HashMap<LocalDate, DayData> getAnimalDataDaysHashMap() {
+	return animalDataDaysHashMap;
 }
 
 
@@ -49,9 +49,12 @@ public ArrayList<DayData> getAnimalDataDaysArray() {
  * @return the day data for the date specified
  */
 public DayData getIndividualDayData(LocalDate dayToGet) {
-	for(int i = 0 ; i < animalDataDaysArray.size(); i++) {
-		if(animalDataDaysArray.get(i).getDayDateGrouping().isEqual(dayToGet)) {
-			return animalDataDaysArray.get(i);
+	Iterator<DayData> animalDayDataIterator = animalDataDaysHashMap.values().iterator();
+	DayData currentCheck;
+	while(animalDayDataIterator.hasNext()) {
+		currentCheck = animalDayDataIterator.next();
+		if(currentCheck.getDayDateGrouping().isEqual(dayToGet)) {
+			return currentCheck;
 		}
 	}
 	return null;
@@ -61,16 +64,10 @@ public DayData getIndividualDayData(LocalDate dayToGet) {
 /**
  * 
  * @param timeToFind is the time to search for a data point
- * @return Is the data point that most closely fits the requested time
+ * @return Is the data point that fits the requested time
  */
 public DataPoint getDataPointFromTime(LocalDateTime timeToFind) {
-	DayData dayThatContains = null;
-	for(int i = 0 ; i < animalDataDaysArray.size(); i ++) {
-		if(animalDataDaysArray.get(i).getDayDateGrouping().isEqual(timeToFind.toLocalDate())) {
-			dayThatContains = animalDataDaysArray.get(i);
-			break;
-		}
-	}
+	DayData dayThatContains = getIndividualDayData(timeToFind.toLocalDate());
 	return dayThatContains.getDataFromTime(timeToFind);
 }
 
@@ -89,44 +86,38 @@ public double getTemperatureFromTime(LocalDateTime timeToFind) {
  * @param newTemperature
  */
 public void addDataPoint(LocalDateTime newTime, double newTemperature) {
-	boolean dayExists = false;
-	for(int i = 0 ; i < animalDataDaysArray.size(); i++) {
-		if(animalDataDaysArray.get(i).getDayDateGrouping().isEqual(newTime.toLocalDate())) {
-			if(timeAlreadyRecorded(newTime)) {
-				dayExists = true;
-			}else {
-			animalDataDaysArray.get(i).addDataPointToDay(new DataPoint(newTime, newTemperature));
+	boolean dayExists = animalDataDaysHashMap.containsKey(newTime.toLocalDate());
+	boolean timeExists = timesRecorded.contains(newTime);
+	if(!timeExists) {
+		DataPoint newDataPoint = new DataPoint(newTime, newTemperature);
+		if(dayExists) {
+			animalDataDaysHashMap.get(newTime.toLocalDate()).addDataPointToDay(newDataPoint);
 			timesRecorded.add(newTime);
-			dayExists = true;
-			}
+		} else {
+			DayData newDay = new DayData(newTime.toLocalDate());
+			newDay.addDataPointToDay(newDataPoint);
+			animalDataDaysHashMap.put(newDay.getDayDateGrouping(), newDay);
+			timesRecorded.add(newTime);
 		}
-	}
-	if(!dayExists) {
-		DayData newDay = new DayData(newTime.toLocalDate());
-		newDay.addDataPointToDay(new DataPoint(newTime, newTemperature));
-		animalDataDaysArray.add(newDay);
-		timesRecorded.add(newTime);
+		
 	}
 }
 
 public void addDataPoint(DataPoint newDataPoint) {
-	boolean dayExists = false;
-for(int i = 0 ; i < animalDataDaysArray.size(); i++) {
-	if(animalDataDaysArray.get(i).getDayDateGrouping().isEqual(newDataPoint.getTime().toLocalDate())) {
-		if(timeAlreadyRecorded(newDataPoint.getTime())) {
-			dayExists = true;
-		}else {
-			animalDataDaysArray.get(i).addDataPointToDay(newDataPoint);
-			timesRecorded.add(newDataPoint.getTime());
-			dayExists = true;
-		}
-	}
-}
-if(!dayExists) {
-	DayData newDay = new DayData(newDataPoint.getTime().toLocalDate());
+	LocalDateTime newTime = newDataPoint.getTime();
+	boolean dayExists = animalDataDaysHashMap.containsKey(newTime.toLocalDate());
+	boolean timeExists = timesRecorded.contains(newTime);
+	
+	if(!timeExists) {
+		if(dayExists) {
+			animalDataDaysHashMap.get(newTime.toLocalDate()).addDataPointToDay(newDataPoint);
+			timesRecorded.add(newTime);
+		} else {
+			DayData newDay = new DayData(newTime.toLocalDate());
 			newDay.addDataPointToDay(newDataPoint);
-			animalDataDaysArray.add(newDay);
-			timesRecorded.add(newDataPoint.getTime());
+			animalDataDaysHashMap.put(newDay.getDayDateGrouping(), newDay);
+			timesRecorded.add(newTime);
+		}
 	}
 }
 
@@ -140,19 +131,23 @@ public boolean timeAlreadyRecorded(LocalDateTime timeQuery) {
  * @return the latest chronological data set
  */
 public DataPoint getLatestUpdate() {
-	if(animalDataDaysArray.size() == 0 || timesRecorded.isEmpty()) {
+	if(animalDataDaysHashMap.isEmpty() || timesRecorded.isEmpty()) {
 		return null;
 	}
-	DayData latestDay = animalDataDaysArray.get(0);
-Iterator<DayData> dayDataIterator = animalDataDaysArray.iterator();
+	
+	DayData latestDay;
+Iterator<DayData> dayDataIterator = animalDataDaysHashMap.values().iterator();
+latestDay = dayDataIterator.next();
+
 while(dayDataIterator.hasNext()) {
 	DayData nextDay = dayDataIterator.next();
 	if(nextDay.getDayDateGrouping().isAfter(latestDay.getDayDateGrouping())) {
 		latestDay = nextDay;
 	}
 }
-	DataPoint latestDataTime = latestDay.getFullDayDataArray().get(0);
-Iterator<DataPoint> dataPointIterator = latestDay.getFullDayDataArray().iterator();
+	DataPoint latestDataTime;
+Iterator<DataPoint> dataPointIterator = latestDay.getFullDayDataHashMap().values().iterator();
+latestDataTime = dataPointIterator.next();
 while(dataPointIterator.hasNext()) {
 	DataPoint nextDataPoint = dataPointIterator.next();
 	if(nextDataPoint.getTime().isAfter(latestDataTime.getTime())) {

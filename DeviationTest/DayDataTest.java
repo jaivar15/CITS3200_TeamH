@@ -27,7 +27,7 @@ class DayDataTest {
 	@Test
 	void testDayData() {
 		addDataPoints();
-		assertTrue(dayDataSet.getFullDayDataArray().size() != 0);
+		assertTrue(dayDataSet.getFullDayDataHashMap().size() != 0);
 	}
 
 	@Test
@@ -35,29 +35,31 @@ class DayDataTest {
 		addDataPoints();
 		assertEquals(LocalDate.now(), dayDataSet.getDayDateGrouping());
 	}
-
-	@Test
-	void testGetFullDayDataArray() {
+	
+	@Test void testGetFullDayDataHashMap() {
+		assertEquals(0, dayDataSet.getFullDayDataHashMap().size());
 		addDataPoints();
-		assertEquals(5, dayDataSet.getFullDayDataArray().size());
+		assertEquals(5, dayDataSet.getFullDayDataHashMap().size());
 	}
 
+	
 	@Test
 	void testAddDataPointToDay() {
 		addDataPoints();
-		assertEquals(32, dayDataSet.getFullDayDataArray().get(4).getTemperature());
+		assertEquals(32, dayDataSet.getFullDayDataHashMap().get(times[4]).getTemperature());
 	}
+	
 
 	@Test
 	void testRemoveFromDayData() {
 		addDataPoints();
 		dayDataSet.removeFromDayData(timeNow.plusHours(2));
-		assertEquals(4, dayDataSet.getFullDayDataArray().size());
+		assertEquals(4, dayDataSet.getFullDayDataHashMap().size());
 		dayDataSet.removeFromDayData(timeNow);
-		assertEquals(3, dayDataSet.getFullDayDataArray().size());
+		assertEquals(3, dayDataSet.getFullDayDataHashMap().size());
 		dayDataSet.removeFromDayData(timeNow.plusHours(1));
 		dayDataSet.removeFromDayData(timeNow.plusHours(3));
-		DataPoint pointLeft = dayDataSet.getFullDayDataArray().get(0);
+		DataPoint pointLeft = dayDataSet.getFullDayDataHashMap().values().iterator().next();
 		assertEquals(32, pointLeft.getTemperature());
 		assertEquals(times[4], pointLeft.getTime());
 	}
@@ -68,7 +70,5 @@ class DayDataTest {
 		DataPoint secondPoint = dayDataSet.getDataFromTime(timeNow.plusHours(1));
 		DataPoint testSecondPoint = new DataPoint(timeNow.plusHours(1), 20);
 		assertTrue(secondPoint.isEqualTo(testSecondPoint));
-		assertEquals(25, dayDataSet.getDataFromTime(timeNow.plusMinutes(30)).getTemperature());
-		assertEquals(19.5, dayDataSet.getDataFromTime(timeNow.plusMinutes(90)).getTemperature());
 	}
 }

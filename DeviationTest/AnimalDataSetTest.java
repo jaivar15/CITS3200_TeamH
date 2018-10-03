@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,16 +48,25 @@ class AnimalDataSetTest {
 		assertEquals(2, animalOneData.daysOfDataCount());
 	}
 
+	
 	@Test
 	void testGetAnimalDataDaysArray() {
 		addData();
 		ArrayList<DayData> theData = new ArrayList<DayData>();
-		theData.addAll(animalOneData.getAnimalDataDaysArray());
+		theData.addAll(animalOneData.getAnimalDataDaysHashMap().values());
 		assertEquals(2, theData.size());
-		double firstDayTemperature = theData.get(0).getFullDayDataArray().get(0).getTemperature();
-		double secondDayTemperature = theData.get(1).getFullDayDataArray().get(0).getTemperature();
-		assertEquals(30, firstDayTemperature);
-		assertEquals(20, secondDayTemperature);
+		DayData firstDay;
+		DayData secondDay;
+		Iterator<DayData> dayIteration = theData.iterator();
+		firstDay = dayIteration.next();
+		secondDay = dayIteration.next();
+		if(firstDay.getDayDateGrouping().isAfter(secondDay.getDayDateGrouping())) {
+			DayData temp = firstDay;
+			firstDay = secondDay;
+			secondDay = temp;
+		}
+		assertTrue(times[0].toLocalDate().isEqual(firstDay.getDayDateGrouping()));
+		assertTrue(times[5].toLocalDate().isEqual(secondDay.getDayDateGrouping()));
 	}
 
 	@Test
@@ -87,9 +97,6 @@ class AnimalDataSetTest {
 		LocalDateTime time6 = timeNow.plusHours(24);
 		assertEquals(actualTemperature1, animalOneData.getTemperatureFromTime(time1));
 		assertEquals(actualTemperature6, animalOneData.getTemperatureFromTime(time6));
-		double interpolatedTemperature = 25;
-		LocalDateTime interpolatedTime = timeNow.plusHours(26).plusMinutes(30);
-		assertEquals(interpolatedTemperature, animalOneData.getTemperatureFromTime(interpolatedTime));
 	}
 
 	@Test
@@ -113,6 +120,8 @@ class AnimalDataSetTest {
 
 	@Test
 	void testGetLatestUpdate() {
+		AnimalDataSet emptyDataSet = new AnimalDataSet();
+		assertTrue(emptyDataSet.getLatestUpdate() == null);
 		addData();
 		LocalDateTime actualLatestTime = timeNow.plusHours(28);
 		double actualLatestTemperature = 10;
