@@ -30,7 +30,6 @@ public class DayData {
 	}
 	
 	public void addDataPointToDay(DataPoint newData) {
-		//fullDayDataArray.add(newData);
 		fullDayDataHashMap.put(newData.getTime(), newData);
 	}
 	
@@ -47,12 +46,11 @@ public class DayData {
 	 */
 	public DataPoint getDataFromTime(LocalDateTime soughtTime) {
 		
-		//Use hashmap to find an existing time faster
 		if(fullDayDataHashMap.containsKey(soughtTime)) {
 			return fullDayDataHashMap.get(soughtTime);
 		}
 		
-		//if the time did not work
+
 	return null;
 	}
 	

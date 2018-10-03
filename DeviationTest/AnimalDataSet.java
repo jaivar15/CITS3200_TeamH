@@ -128,7 +128,7 @@ public boolean timeAlreadyRecorded(LocalDateTime timeQuery) {
 
 /**
  * 
- * @return the latest chronological data set
+ * @return the latest chronological DataPoint
  */
 public DataPoint getLatestUpdate() {
 	if(animalDataDaysHashMap.isEmpty() || timesRecorded.isEmpty()) {
