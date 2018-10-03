@@ -140,6 +140,9 @@ public boolean timeAlreadyRecorded(LocalDateTime timeQuery) {
  * @return the latest chronological data set
  */
 public DataPoint getLatestUpdate() {
+	if(animalDataDaysArray.size() == 0) {
+		return null;
+	}
 	DayData latestDay = animalDataDaysArray.get(0);
 Iterator<DayData> dayDataIterator = animalDataDaysArray.iterator();
 while(dayDataIterator.hasNext()) {
