@@ -140,7 +140,7 @@ public boolean timeAlreadyRecorded(LocalDateTime timeQuery) {
  * @return the latest chronological data set
  */
 public DataPoint getLatestUpdate() {
-	if(animalDataDaysArray.size() == 0) {
+	if(animalDataDaysArray.size() == 0 || timesRecorded.isEmpty()) {
 		return null;
 	}
 	DayData latestDay = animalDataDaysArray.get(0);
