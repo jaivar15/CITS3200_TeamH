@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 
@@ -14,10 +15,12 @@ public class DayData {
 
 	private LocalDate dayDateGrouping;
 	private ArrayList<DataPoint> fullDayDataArray;
+	private HashMap<LocalDateTime, DataPoint> fullDayDataHashMap;
 	
 	public DayData(LocalDate dayGrouping) {
 		this.fullDayDataArray = new ArrayList<DataPoint>();
 		this.dayDateGrouping = dayGrouping;
+		fullDayDataHashMap = new HashMap<LocalDateTime, DataPoint>();
 	}
 	
 	public LocalDate getDayDateGrouping() {
@@ -28,16 +31,24 @@ public class DayData {
 		return fullDayDataArray;
 	}
 	
+	public HashMap<LocalDateTime, DataPoint> getFullDayDataHashMap(){
+		return fullDayDataHashMap;
+	}
+	
 	public void addDataPointToDay(DataPoint newData) {
 		fullDayDataArray.add(newData);
+		fullDayDataHashMap.put(newData.getTime(), newData);
 	}
 	
 	public void removeFromDayData(LocalDateTime timeToRemove) {
+		if(!fullDayDataHashMap.containsKey(timeToRemove)){
+		}
 		for(int i = 0 ; i < fullDayDataArray.size(); i++) {
 			if(fullDayDataArray.get(i).getTime().compareTo(timeToRemove) == 0) {
 				fullDayDataArray.remove(i);
 			}
 		}
+		fullDayDataHashMap.remove(timeToRemove);
 	}
 	
 	/**
@@ -46,6 +57,11 @@ public class DayData {
 	 * @return the data point at a required time
 	 */
 	public DataPoint getDataFromTime(LocalDateTime soughtTime) {
+		
+		//Use hashmap to find an existing time faster
+		if(fullDayDataHashMap.containsKey(soughtTime)) {
+			return fullDayDataHashMap.get(soughtTime);
+		}
 		
 		//iterate through list looking for a specific time (assuming chronological entry)
 		for(int i = 0 ; i < fullDayDataArray.size(); i ++) {
@@ -64,7 +80,6 @@ public class DayData {
 		else if(fullDayDataArray.get(i - 1).getTime().isBefore(soughtTime) && fullDayDataArray.get(i).getTime().isAfter(soughtTime)) {
 			DataPoint dataPoint1 = fullDayDataArray.get(i-1);
 			DataPoint dataPoint2 = fullDayDataArray.get(i);
-			
 			return new DataPoint(soughtTime, temperatureInterpolator(dataPoint1.getTime(), dataPoint1.getTemperature(), dataPoint2.getTime(), dataPoint2.getTemperature(), soughtTime));
 		}
 	}

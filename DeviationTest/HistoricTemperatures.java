@@ -22,16 +22,22 @@ private double mean;
 		}else limitDays = animalData.daysOfDataCount() - 1;
 		
 		historicTemperatures = new double[limitDays];
-		
+		int timesFound = 0;
 		for(int i = 0 ; i < limitDays ; i++) {
+			if(animalData.timeAlreadyRecorded(animalData.getLatestUpdate().getTime().minusDays(i + 1))) {
 			historicTemperatures[i] = animalData.getTemperatureFromTime(animalData.getLatestUpdate().getTime().minusDays(i + 1));
+			timesFound++;
+			}
+			else historicTemperatures[i] = Integer.MIN_VALUE;
 		}
 		
 		double totalTemp = 0;
 		for(int i = 0 ; i < limitDays ; i++) {
+			if(historicTemperatures[i] != Integer.MIN_VALUE) {
 			totalTemp += historicTemperatures[i];
+			}
 		}
-		mean = totalTemp/limitDays;
+		mean = totalTemp/timesFound;
 	}
 	
 	/**
@@ -53,16 +59,22 @@ private double mean;
 		}else limitDays = numberOfPastDays;
 		
 		historicTemperatures = new double[limitDays];
-		
+		int timesFound = 0;
 		for(int i = 0 ; i < limitDays ; i++) {
+			if(animalData.timeAlreadyRecorded(customTime.minusDays(i + 1))) {
 			historicTemperatures[i] = animalData.getTemperatureFromTime(customTime.minusDays(i + 1));
+			timesFound++;
+			}
+			else historicTemperatures[i] = Integer.MIN_VALUE;
 		}
 		
 		double totalTemp = 0;
 		for(int i = 0 ; i < limitDays ; i++) {
+			if(historicTemperatures[i] != Integer.MIN_VALUE) {
 			totalTemp += historicTemperatures[i];
+			}
 		}
-		mean = totalTemp/limitDays;
+		mean = totalTemp/timesFound;
 	}
 	
 
