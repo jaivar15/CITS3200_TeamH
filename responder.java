@@ -1,5 +1,14 @@
-package com.company;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package swing;
 
+/**
+ *
+ * @author varunjain
+ */
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -101,7 +110,7 @@ public class responder {
 
     public void backUp(){
         Object[] data = {IDtoEmails,emailToName,animalIDtoName,emailsToIDs};
-        serialization ser = new serialization(data, "/Users/toomato/Desktop","responder");
+        serialization ser = new serialization(data, "/Users/varunjain/Desktop","responder");
         ser.SerializeObject();
     }
 
@@ -132,10 +141,22 @@ public class responder {
         for(String s : emailToName.keySet()){
             out[i][0] = emailToName.get(s);
             out[i][1] = s;
-            out[i][2] = emailsToIDs.get(s).toString();
+            //out[i][2] = emailsToIDs.get(s).toString();
             i++;
         }
         return out;
+    }
+    
+    public Object[] readBackUpFile(String path){
+        deserialization d = new deserialization(path);
+        d.deserializeObject();
+        Object[] o = d.getData();
+        if( o == null){
+            //TODO
+            System.out.println("error");
+            System.exit(0);
+        }
+        return o;
     }
 
     public String toString(){

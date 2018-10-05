@@ -1,3 +1,14 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package swing;
+
+/**
+ *
+ * @author y2434
+ */
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -185,9 +196,9 @@ public class addNew extends JFrame {
                     double time = Double.valueOf(txtTime.getText());
                     String filePath = lblFile.getText();
 
-                    Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
-                    serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\CITS3200","test");
-                    ser.SerializeObject();
+                    //Object[] data = {animalName, animalDescription, deviation, days, time, filePath};
+                    //serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\CITS3200","test");
+                    //ser.SerializeObject();
 
                     JOptionPane.showMessageDialog(null, "Added successfully");
                     //close();
