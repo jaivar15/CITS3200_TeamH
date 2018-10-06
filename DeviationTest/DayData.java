@@ -40,7 +40,7 @@ public class DayData {
 	}
 	
 	/**
-	 * 
+	 * Searches for a datapoint matching a specified time. will small deviations left and right if not initially found
 	 * @param soughtTime
 	 * @return the data point at a required time
 	 */
@@ -48,6 +48,14 @@ public class DayData {
 		
 		if(fullDayDataHashMap.containsKey(soughtTime)) {
 			return fullDayDataHashMap.get(soughtTime);
+		} else {//Search small increments left and right in case of timing errors
+			for(int i = 0 ; i < 3 ; i ++) {
+			if(fullDayDataHashMap.containsKey(soughtTime.plusMinutes(i))){
+				return fullDayDataHashMap.get(soughtTime);
+			} else if(fullDayDataHashMap.containsKey(soughtTime.minusMinutes(i))) {
+				return fullDayDataHashMap.get(soughtTime);
+			}
+			}
 		}
 		
 
