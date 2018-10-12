@@ -35,6 +35,10 @@ public class responder {
         animalName = new HashSet<>();
         recover(o);
     }
+    
+    public HashSet<String> getEmailsForAnimal(String animalName) {
+    	return AnimalNameToEmails.get(animalName);
+    }
 
     public void addResponder(String AnimalName, String address){
         if(emailToUserName.containsKey(address) && animalName.contains(AnimalName)){
