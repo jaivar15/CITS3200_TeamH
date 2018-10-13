@@ -15,12 +15,18 @@ import javax.swing.JFrame;
  */
 public class AdvancedFeatures extends javax.swing.JFrame {
 
+	Home home;
     /**
      * Creates new form advancedFeatures
      */
     public AdvancedFeatures() {
         initComponents();
-        
+        home = null;
+    }
+    
+    public AdvancedFeatures(Home home) {
+    	this.home = home;
+    	initComponents();
     }
 
     /**
@@ -106,7 +112,7 @@ public class AdvancedFeatures extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stdLEVELActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stdLEVELActionPerformed
-        ChangeDeviation std = new ChangeDeviation(); 
+        ChangeDeviation std = new ChangeDeviation(home); 
         
         
            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

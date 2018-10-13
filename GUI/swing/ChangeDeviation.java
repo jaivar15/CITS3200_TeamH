@@ -176,7 +176,6 @@ public class ChangeDeviation extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void setfileName(String fileName){
-        //String fileName = "";
         text = new JLabel(fileName);
         text.setBounds(394, 99, 92, 26);
         getContentPane().add(text);
@@ -194,6 +193,11 @@ public class ChangeDeviation extends javax.swing.JFrame {
 		    	Object[] data = {a.animalName, a.animalDescription, a.deviation, a.days, a.duration, a.filePath, a.orangeDev, a.redDev};
 		        serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals", a.animalName);
 		        ser.SerializeObject();
+		        
+		        if (home != null) {
+			        int row = change.animals.indexOf(a);
+			        home.changeRow(a,row);
+		        }
 		        
 		        JOptionPane.showMessageDialog(null, "Changed successfully");
     		} catch (NumberFormatException e) {

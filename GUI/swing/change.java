@@ -48,6 +48,11 @@ public class change {
 			// this should only happen on old data files that dont have all of the fields
 		}
 		
+		for (Animal animal : animals) {
+			if (a.animalName.equals(animal.animalName)) {
+				return;
+			}
+		}
 		animals.add(a);
 	}
 	

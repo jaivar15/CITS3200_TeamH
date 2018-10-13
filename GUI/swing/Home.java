@@ -5,6 +5,8 @@
  */
 package swing;
 import java.awt.Color;
+import java.io.File;
+
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JFrame;
@@ -33,6 +35,7 @@ public class Home extends javax.swing.JFrame {
     private ArrayList<Notifications> recentNotifications;
     private ArrayList<Monitor> monitors;
     
+    private final String animalsPath = "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals";
     private final double DEFAULT_ORANGE = 1.0;
     private final double DEFAULT_RED = 2.0;
     
@@ -44,7 +47,7 @@ public class Home extends javax.swing.JFrame {
         animalInfo = new ArrayList<?>[1][10];
         recentNotifications = new ArrayList<Notifications>();
         monitors = new ArrayList<Monitor>();
-        change.readAnimals("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals");
+        change.readAnimals(animalsPath);
         for (Animal a : change.animals) {
         	monitors.add(new Monitor(a));
         }
@@ -74,12 +77,10 @@ public class Home extends javax.swing.JFrame {
         Object[] ser = user.readBackUpFile("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/responder.dat");
         user.recover(ser);
         
-      //  System.out.println(user.toString());
-        
         animalSelectionTable.setModel(new javax.swing.table.DefaultTableModel(
             user.getAnimals(),
             new String [] {
-                "Name", "Click"
+                "Name", "Selected"
             }
         ) {
             Class[] types = new Class [] {
@@ -171,15 +172,16 @@ public class Home extends javax.swing.JFrame {
             }
         });
         
-        change.readAnimals("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals");	
+        change.readAnimals(animalsPath);	
       	int numAnimals = change.animals.size();
-      	Object[][] animalData = new Object[numAnimals][5];
+      	Object[][] animalData = new Object[numAnimals][6];
       	for (int i = 0; i < numAnimals; i++) {
       		animalData[i][0] = change.animals.get(i).animalName;
       		animalData[i][1] = change.animals.get(i).animalDescription;
       		animalData[i][2] = change.animals.get(i).deviation;
       		animalData[i][3] = change.animals.get(i).days;
       		animalData[i][4] = change.animals.get(i).duration;
+      		animalData[i][5] = false; 
       	}
         
         addAnimalTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -212,7 +214,7 @@ public class Home extends javax.swing.JFrame {
         changeIdTable.setModel(new javax.swing.table.DefaultTableModel(
             animalData,
             new String [] {
-                "Animal Name", "Animal Description", "S.D.", "Days", "Duration", "Click"
+                "Animal Name", "Animal Description", "S.D.", "Days", "Duration", "Select"
             }
         ) {
             Class[] types = new Class [] {
@@ -706,7 +708,7 @@ public class Home extends javax.swing.JFrame {
         DurationText.setBackground(new java.awt.Color(42, 75, 115));
         DurationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
 
-        StandardDeviationLabel.setText("standard deviation");
+        StandardDeviationLabel.setText("Deviation");
 
         AnimalNameLabel.setText("Animal Name ");
 
@@ -844,8 +846,6 @@ public class Home extends javax.swing.JFrame {
             }
         });
         
-
-        changeIdTable.setAutoCreateRowSorter(true);
         changeIdTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -854,10 +854,8 @@ public class Home extends javax.swing.JFrame {
 
             }
         ));
-        changeIdTable.setColumnSelectionAllowed(true);
         changeIdTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(changeIdTable);
-      //  changeIdTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.);
 
         javax.swing.GroupLayout changeIDPanelLayout = new javax.swing.GroupLayout(changeIDPanel);
         changeIDPanel.setLayout(changeIDPanelLayout);
@@ -1123,7 +1121,6 @@ public class Home extends javax.swing.JFrame {
 
     private void ChangeIDButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChangeIDButtonMousePressed
         // TODO add your handling code here:
-        checkInput2();
         changeAction();
         changeIdTable.updateUI();
     }//GEN-LAST:event_ChangeIDButtonMousePressed
@@ -1154,7 +1151,7 @@ public class Home extends javax.swing.JFrame {
             password.setText(null); 
             useremailid.setText(null); 
             
-            AdvancedFeatures features = new AdvancedFeatures(); 
+            AdvancedFeatures features = new AdvancedFeatures(this); 
             features.setVisible(true); 
         }
         else 
@@ -1267,8 +1264,15 @@ public class Home extends javax.swing.JFrame {
                     a.orangeDev = a.deviation + DEFAULT_ORANGE;
                     a.redDev = a.deviation + DEFAULT_RED;
 
+                    for (Animal animal : change.animals) {
+                    	if (animal.animalName.equals(a.animalName)) {
+                    		 JOptionPane.showMessageDialog(null, "Please give the animal a unique name");
+                    		return;
+                    	}
+                    }
+                    
                     Object[] data = {a.animalName, a.animalDescription, a.deviation, a.days, a.duration, a.filePath, a.orangeDev, a.redDev};
-                    serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals", a.animalName);
+                    serialization ser = new serialization(data, animalsPath, a.animalName);
                     ser.SerializeObject();
                     
                     monitors.add(new Monitor(a));
@@ -1298,14 +1302,14 @@ public class Home extends javax.swing.JFrame {
                 a.duration = Double.valueOf(ChangeDurationText.getText());
 
                 Object[] data = {a.animalName, a.animalDescription, a.deviation, a.days, a.duration, a.filePath, a.orangeDev, a.redDev};
-                serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals", a.animalName);
+                serialization ser = new serialization(data, animalsPath, a.animalName);
                 ser.SerializeObject();
 
                 changeRow(a, i);
               
 
                 //TODO check it was actually successful
-                JOptionPane.showMessageDialog(null, "Added successfully");
+                JOptionPane.showMessageDialog(null, "Changed successfully");
                 //close();
 
             } catch (NumberFormatException ex) {
@@ -1316,7 +1320,7 @@ public class Home extends javax.swing.JFrame {
     
     
     private void addRow(Animal a) {
-    	change.readAnimals("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals");
+    	change.readAnimals(animalsPath);
 
   		Object[] animalData = new Object[5];
   		animalData[0] = a.animalName;
@@ -1342,7 +1346,7 @@ public class Home extends javax.swing.JFrame {
     }
     
     public void changeRow(Animal a, int row) {
-    	change.readAnimals("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals");
+    	change.readAnimals(animalsPath);
   		
   		DefaultTableModel model = (DefaultTableModel) changeIdTable.getModel();
         model.setValueAt(a.animalName, row, 0);
@@ -1366,18 +1370,7 @@ public class Home extends javax.swing.JFrame {
     }
     
     private int animalSelected() {
-    	int row = changeIdTable.getSelectedRow();
-    	if (row < 0) {
-    		return -1;
-    	}
-    	String name = (String)changeIdTable.getValueAt(row, 0);
-    	for (Animal a : change.animals) {
-    		if (a.animalName.equals(name)) {
-    			//setChangeAnimal(a);
-    			return change.animals.indexOf(a);
-    		}
-    	}
-    	return -1;
+    	return changeIdTable.getSelectedRow();
     }
     
     private void setChangeAnimal(Animal a) {
@@ -1414,6 +1407,31 @@ public class Home extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill in all fields and select a file");
         }
         return returnSt;
+    }
+    
+    // method called when the delete button is clicked
+    private void deleteAnimals() {
+    	for (int i = 0; i < change.animals.size(); i++) {
+    		if ((boolean)changeIdTable.getValueAt(i, 5) == true) {
+    			
+    			// removes from the tables
+    			((DefaultTableModel)changeIdTable.getModel()).removeRow(i);
+    			changeIdTable.repaint();
+    			((DefaultTableModel)addAnimalTable.getModel()).removeRow(i);
+    			addAnimalTable.repaint();
+    			
+    			//TODO remove the monitor
+    			//TODO remove from emails
+    			
+    			String path = animalsPath + "/" + change.animals.get(i).animalName + ".dat";
+    			File file = new File(path);
+    			file.delete();
+    			
+    			change.animals.remove(i);
+    			
+    			i--;
+    		}
+    	}
     }
         
     private void setColor(JPanel pane)
