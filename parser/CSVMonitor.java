@@ -1,33 +1,49 @@
 package parser;
 
 import DeviationTest.DataPoint;
-import DeviationTest.DaySets;
+import DeviationTest.AnimalDataSet;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
+import mail.mail;
 
-public class CSVMonitor extends Thread{
+import javax.mail.internet.MimeMultipart;
+
+import static DeviationTest.DeviationChecks.checkDeviationLatest;
+
+public class CSVMonitor extends Thread implements Serializable{
 	
-	private int charCount, lineCount;
+	private int charCount, lineCount, consecutiveTimeForAlert, deviationBeforeAlert, daysToCheck;
+	private LocalDateTime timeToAlert;
 	private BufferedReader reader;
 	private Timer timer = new Timer();
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-	private String delimiter, sensorID;
-	private DaySets data;
+	private String delimiter, sensorID, profileFilePath, senderEmail, senderEmailPass;
+	private String[] receivingEmails;
+	private AnimalDataSet data;
 	private AtomicBoolean stop = new AtomicBoolean(false);
 	private Boolean initialRead = true;
-	
-	public CSVMonitor(String filePath, int startLine) {
+
+
+	/**
+	 *
+	 * @param dataFilePath Data file path (CSV file from transponder)
+	 * @param profileFilePath File path for monitor properties
+	 * @param startLine Line to start reading CSV from (Use 0 if initalising)
+	 */
+	public CSVMonitor(String dataFilePath, String profileFilePath, int startLine) {
 		charCount = 0;
 		lineCount = 0;
 		delimiter = ",";
 		sensorID = "";
-		data = new DaySets();
+		this.profileFilePath = profileFilePath;
+		data = new AnimalDataSet();
 		try {
-			reader = new BufferedReader(new FileReader(filePath));
+			reader = new BufferedReader(new FileReader(dataFilePath));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -40,11 +56,18 @@ public class CSVMonitor extends Thread{
 		}
 		ReadCSV();
 		initialRead = false;
+		readProfile();
 	}
-	
+
+	/*
 	public CSVMonitor(String filePath){
 		this(filePath, 0);
 	}
+	*/
+
+	public void readProfile(){
+
+	};
 	
 	public DataPoint ReadCSV() {
 		String[] line = new String[2];
@@ -81,7 +104,7 @@ public class CSVMonitor extends Thread{
 		return p;
 	}
 	
-	public DaySets getData() {
+	public AnimalDataSet getData() {
 		return data;
 	}
 	
@@ -93,15 +116,31 @@ public class CSVMonitor extends Thread{
 	@Override
 	public void run() {
 		while (!isStopped()){
+			readProfile();
+
 			DataPoint fromFile = ReadCSV();
 			DataPoint latest = data.getLatestUpdate();
+
 				if (!latest.isEqualTo(fromFile)) {
+
 					data.addDataPoint(fromFile);
+
+					latest = data.getLatestUpdate();
+					double[] check = checkDeviationLatest(data, deviationBeforeAlert, daysToCheck);
+					if (check[0] == 1){
+						if (timeToAlert == null){
+							timeToAlert = data.getLatestUpdate().getTime().plusHours(consecutiveTimeForAlert);
+						} else if (timeToAlert.compareTo(latest.getTime()) <= 0 ){
+								sendMail();
+						}
+					}
+					if (timeToAlert != null && check[0] == 0){
+						timeToAlert = null;
+					}
 				}
 			try {
 				Thread.sleep(60000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -112,6 +151,24 @@ public class CSVMonitor extends Thread{
 	
 	public void setSensorID(String s){
 		sensorID = s;
+	}
+
+	public void sendMail(){
+		mail mailer = null;
+		try {
+			mailer = new mail(senderEmail, senderEmailPass, "587", receivingEmails);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Properties props = mailer.initProperties();
+		mailer.initSmtpPort(props);
+		MimeMultipart finals;
+		try {
+			finals = mailer.text("only text in this meeage");
+			mailer.sent(props,finals);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//Legacy Code
