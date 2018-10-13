@@ -2,6 +2,7 @@ package parser;
 
 import DeviationTest.DataPoint;
 import DeviationTest.AnimalDataSet;
+import GUI.swing.Animal;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,12 +18,13 @@ import static DeviationTest.DeviationChecks.checkDeviationLatest;
 
 public class CSVMonitor extends Thread implements Serializable{
 	
-	private int charCount, lineCount, consecutiveTimeForAlert, deviationBeforeAlert, daysToCheck;
+	private int charCount, lineCount, consecutiveTimeForAlert, daysToCheck; //get someone to make consec. time minutes or
+	private double deviationBeforeAlert;									//hours and define this, make it an int in settings.
+	private Animal animal;
 	private LocalDateTime timeToAlert;
 	private BufferedReader reader;
-	private Timer timer = new Timer();
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-	private String delimiter, sensorID, profileFilePath, senderEmail, senderEmailPass;
+	private String delimiter, sensorID, senderEmail, senderEmailPass;
 	private String[] receivingEmails;
 	private AnimalDataSet data;
 	private AtomicBoolean stop = new AtomicBoolean(false);
@@ -30,20 +32,22 @@ public class CSVMonitor extends Thread implements Serializable{
 
 
 	/**
-	 *
-	 * @param dataFilePath Data file path (CSV file from transponder)
-	 * @param profileFilePath File path for monitor properties
-	 * @param startLine Line to start reading CSV from (Use 0 if initalising)
+	 * Creating this object will monitor an animal's CSV data file and send an email when deviation parameters met
+	 * Maybe this one for backup feature?
+	 * @param a Animal that this monitor object will be watching
 	 */
-	public CSVMonitor(String dataFilePath, String profileFilePath, int startLine) {
+	public CSVMonitor(Animal a, int startLine) {
+		animal = a;
+		consecutiveTimeForAlert = (int) animal.getDuration();
+		deviationBeforeAlert = animal.getDeviation();
+		daysToCheck = animal.getDays();
 		charCount = 0;
 		lineCount = 0;
 		delimiter = ",";
 		sensorID = "";
-		this.profileFilePath = profileFilePath;
 		data = new AnimalDataSet();
 		try {
-			reader = new BufferedReader(new FileReader(dataFilePath));
+			reader = new BufferedReader(new FileReader(animal.getFilePath()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -56,19 +60,32 @@ public class CSVMonitor extends Thread implements Serializable{
 		}
 		ReadCSV();
 		initialRead = false;
-		readProfile();
 	}
-
-	/*
-	public CSVMonitor(String filePath){
-		this(filePath, 0);
-	}
-	*/
-
-	public void readProfile(){
-
-	};
 	
+	/**
+	 * Creating this object will monitor an animal's CSV data file and send an email when deviation parameters met
+	 * Use this one for now
+	 * @param a Animal that this monitor object will be watching
+	 */
+	public CSVMonitor(Animal a){
+		this(a, 0);
+	}
+	
+	/**
+	 * Check if user has updated animal parameters in GUI and make these changes to the monitor
+	 */
+	private void checkForUpdatesToAnimal(){
+		Animal temp = GUI.swing.change.getAnimal(animal.getAnimalName());
+		if (!animal.equals(temp)){
+			animal = temp;
+		}
+	}
+	
+	/**
+	 * Read the CSV file for the newest entry
+	 * Do some roundabout shit if first read.
+	 * @return latest datapoint from CSV file
+	 */
 	public DataPoint ReadCSV() {
 		String[] line = new String[2];
 		DataPoint p = null;
@@ -104,19 +121,35 @@ public class CSVMonitor extends Thread implements Serializable{
 		return p;
 	}
 	
+	/**
+	 *
+	 * @return dataset for this monitor
+	 */
 	public AnimalDataSet getData() {
 		return data;
 	}
 	
+	/**
+	 * Check if monitor is running or stopped
+	 * @return True if stopped, false if running
+	 */
 	public boolean isStopped() { return stop.get(); }
 	
+	/**
+	 * Use this to stop monitor from checking, will still exist in memory tho
+	 */
 	public void stopThread() { stop.set(true); }
 	
-	
+	/**
+	 * Runs the monitor every minute
+	 * Reads the CSV file for latest changes
+	 * If there is an update check for deviation, send alert if necessary
+	 * Use .interrupt() to update early
+	 */
 	@Override
 	public void run() {
 		while (!isStopped()){
-			readProfile();
+			checkForUpdatesToAnimal();
 
 			DataPoint fromFile = ReadCSV();
 			DataPoint latest = data.getLatestUpdate();
@@ -140,7 +173,7 @@ public class CSVMonitor extends Thread implements Serializable{
 				}
 			try {
 				Thread.sleep(60000);
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 			}
 		}
 	}
@@ -152,7 +185,12 @@ public class CSVMonitor extends Thread implements Serializable{
 	public void setSensorID(String s){
 		sensorID = s;
 	}
-
+	
+	/**
+	 * Sends mail
+	 * TODO: Add receiving emails list to this, add way to get sender email and pass.
+	 * TODO: What message to send also.
+	 */
 	public void sendMail(){
 		mail mailer = null;
 		try {
