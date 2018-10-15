@@ -35,10 +35,6 @@ public class responder {
         animalName = new HashSet<>();
         recover(o);
     }
-    
-    public HashSet<String> getEmailsForAnimal(String animalName) {
-    	return AnimalNameToEmails.get(animalName);
-    }
 
     public void addResponder(String AnimalName, String address){
         if(emailToUserName.containsKey(address) && animalName.contains(AnimalName)){
@@ -66,38 +62,29 @@ public class responder {
     
     public void removeAnimalFromResponder(String AnimalName,String address){
 
-        if(AnimalNameToEmails.get(AnimalName).contains(address)){
-            AnimalNameToEmails.get(AnimalName).remove(address);
+        if(AnimalNameToEmails.containsKey(AnimalName)){
+            if(AnimalNameToEmails.get(AnimalName).contains(address)){
+                AnimalNameToEmails.get(AnimalName).remove(address);
+            }
         }
-
-        if(emailsToAnimalName.get(address).contains(AnimalName)){
-
-            emailsToAnimalName.get(address).remove(AnimalName);
-        }
-        System.out.println(emailsToAnimalName.toString());
-        System.out.println(AnimalNameToEmails.toString());
-    }
-
-    public void addMutiResponder(String[] name, String address){
-        for(int i = 0; i < name.length ; i++){
-            addResponder(name[i], address);
+        if(emailsToAnimalName.containsKey(address)) {
+            if (emailsToAnimalName.get(address).contains(AnimalName)) {
+                emailsToAnimalName.get(address).remove(AnimalName);
+            }
         }
     }
 
     public void removeAnimal(String AnimalName){
-        if(AnimalNameToEmails.containsKey(AnimalName)){
+        if(animalName.contains(AnimalName)){
             animalName.remove(AnimalName);
-            for( String s: AnimalNameToEmails.get(AnimalName)){
-                emailsToAnimalName.get(s).remove(AnimalName);
+            if(AnimalNameToEmails.containsKey(AnimalName)) {
+                for (String s : emailsToAnimalName.keySet()) {
+                    emailsToAnimalName.get(s).remove(AnimalName);
+                }
+                AnimalNameToEmails.remove(AnimalName);
             }
-            AnimalNameToEmails.remove(AnimalName);
         }
-    }
-
-    public void removeMutiAnimal(String[] AnimalNames){
-        for(int i = 0; i < AnimalNames.length; i++){
-            removeAnimal(AnimalNames[i]);
-        }
+        System.out.println(toString());
     }
 
     public void newAnimal(String Name){
@@ -135,7 +122,7 @@ public class responder {
 
     public void backUp(){
         Object[] data = {AnimalNameToEmails,emailToUserName,animalName,emailsToAnimalName};
-        serialization ser = new serialization(data, "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src","responder");
+        serialization ser = new serialization(data, "" ,"responder");
         ser.SerializeObject();
     }
 
@@ -146,7 +133,9 @@ public class responder {
         for(String s : emailToUserName.keySet()){
             out[i][0] = emailToUserName.get(s);
             out[i][1] = s;
-            out[i][2] = emailsToAnimalName.get(s).toString();
+            if(emailsToAnimalName.containsKey(s)) {
+                out[i][2] = emailsToAnimalName.get(s).toString();
+            }
             i++;
         }
         return out;
@@ -154,13 +143,11 @@ public class responder {
 
     public Object[] readBackUpFile(String path){
         deserialization d = new deserialization(path);
-        d.deserializeObject();
-        Object[] o = d.getData();
-        if( o == null){
-            //TODO
-            System.out.println("error");
-            System.exit(0);
+        if((d.deserializeObject()) == false){
+            backUp();
+            d.deserializeObject();
         }
+        Object[] o = d.getData();
         return o;
     }
     
@@ -174,8 +161,10 @@ public class responder {
         boolean[] det = new boolean[size];
         for(String s : animalName){
             det[i]=false;
-            if( emailsToAnimalName.get(email).contains(s) ){
-                det[i]=true;
+            if(emailsToAnimalName.containsKey(email)) {
+                if (emailsToAnimalName.get(email).contains(s)) {
+                    det[i] = true;
+                }
             }
             i++;
         }
