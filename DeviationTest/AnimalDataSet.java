@@ -1,3 +1,6 @@
+package deviationTest;
+
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,7 +18,7 @@ private HashMap<LocalDate, DayData> animalDataDaysHashMap;
 private HashSet<LocalDateTime> timesRecorded;
 	
 /**
- * Constructs an empty group of animal days data
+ * Constructs the dataset for an animal
  */
 public AnimalDataSet() {
 	timesRecorded = new HashSet<LocalDateTime>();
@@ -24,12 +27,16 @@ public AnimalDataSet() {
 	
 /**
  * 
- * @return The number of days worth of data stored in this set
+ * @return The number of unique days worth of data stored in this set
  */
 public int daysOfDataCount() {
 	return animalDataDaysHashMap.size();
 }
 
+/**
+ * 
+ * @return the number of datapoints entered for this animal
+ */
 public int dataPointsCount() {
 	return timesRecorded.size();
 }
@@ -87,8 +94,8 @@ public double getTemperatureFromTime(LocalDateTime timeToFind) {
  */
 public void addDataPoint(LocalDateTime newTime, double newTemperature) {
 	boolean dayExists = animalDataDaysHashMap.containsKey(newTime.toLocalDate());
-	boolean timeExists = timesRecorded.contains(newTime);
-	if(!timeExists) {
+	//boolean timeExists = timesRecorded.contains(newTime);
+	if(!timeAlreadyRecorded(newTime)) {
 		DataPoint newDataPoint = new DataPoint(newTime, newTemperature);
 		if(dayExists) {
 			animalDataDaysHashMap.get(newTime.toLocalDate()).addDataPointToDay(newDataPoint);
@@ -103,12 +110,16 @@ public void addDataPoint(LocalDateTime newTime, double newTemperature) {
 	}
 }
 
+/**
+ * Creates a new data point if none previously exists
+ * @param newDataPoint
+ */
 public void addDataPoint(DataPoint newDataPoint) {
 	LocalDateTime newTime = newDataPoint.getTime();
 	boolean dayExists = animalDataDaysHashMap.containsKey(newTime.toLocalDate());
-	boolean timeExists = timesRecorded.contains(newTime);
+	//boolean timeExists = timesRecorded.contains(newTime);
 	
-	if(!timeExists) {
+	if(!timeAlreadyRecorded(newTime)) {
 		if(dayExists) {
 			animalDataDaysHashMap.get(newTime.toLocalDate()).addDataPointToDay(newDataPoint);
 			timesRecorded.add(newTime);
@@ -121,6 +132,11 @@ public void addDataPoint(DataPoint newDataPoint) {
 	}
 }
 
+/**
+ * Tests if a datapoint being entered for this animal will conflict with an existing datapoint
+ * @param timeQuery
+ * @return
+ */
 public boolean timeAlreadyRecorded(LocalDateTime timeQuery) {
 	return timesRecorded.contains(timeQuery);
 }
