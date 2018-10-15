@@ -37,8 +37,8 @@ public class Home extends javax.swing.JFrame {
     private ArrayList<Notifications> recentNotifications;
     private ArrayList<Monitor> monitors;
     
-    private final String animalsPath = System.getProperty("user.dir") + "//src//swing//animals";  
-    private final String responsderFile = System.getProperty("user.dir") + "\\src/responder.dat";
+    private final String animalsPath = System.getProperty("user.dir") + "/src/swing/animals";  
+    private final String responsderFile = System.getProperty("user.dir") + "/src/swing/responder.dat";
     private final double DEFAULT_ORANGE = 1.0;
     private final double DEFAULT_RED = 2.0;
     
@@ -110,7 +110,7 @@ public class Home extends javax.swing.JFrame {
         UserTable.setModel(new javax.swing.table.DefaultTableModel(
             user.UserInfoOutPut(),
             new String [] {
-                "Name", "Email", "Animal Responsed",
+                "Name", "Email", "Animals",
             }
         ) {
             Class[] types = new Class [] {
@@ -607,7 +607,7 @@ public class Home extends javax.swing.JFrame {
 
         EmailNameTextLable.setText("Email Name");
 
-        EmailAccountTextLabel.setText("Emails Account");
+        EmailAccountTextLabel.setText("Email Account");
 
         AddIntoButton.setText("New User");
         AddIntoButton.addActionListener(new java.awt.event.ActionListener() {
@@ -620,7 +620,7 @@ public class Home extends javax.swing.JFrame {
 
         jScrollPane5.setViewportView(animalSelectionTable);
 
-        animalSelectionButton.setText("Add animal to email");
+        animalSelectionButton.setText("Add Animal to Email");
         animalSelectionButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 animalSelectionButtonMouseReleased(evt);
@@ -632,7 +632,7 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        deleteEmailButton.setText("delete email");
+        deleteEmailButton.setText("Delete Email");
         deleteEmailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteEmailButtonActionPerformed(evt);
@@ -723,14 +723,14 @@ public class Home extends javax.swing.JFrame {
 
         DurationLabel.setText("Duration");
 
-        ChoseFileButton.setText("Chose the data file");
+        ChoseFileButton.setText("Choose the data file");
         ChoseFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ChoseFileButtonActionPerformed(evt);
             }
         });
 
-        Submit.setText("Submit");
+        Submit.setText("Add Animal");
         Submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SubmitActionPerformed(evt);
@@ -814,7 +814,7 @@ public class Home extends javax.swing.JFrame {
 
         changeIDPanel.setBackground(new java.awt.Color(204, 153, 255));
 
-        ChangeStandardDeviationLabel.setText("standard deviation");
+        ChangeStandardDeviationLabel.setText("Deviation");
 
         ChangeDurationLabel.setText("Duration");
 
@@ -954,14 +954,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        useremailid.setText("jTextField1");
+        useremailid.setText("");
         useremailid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 useremailidActionPerformed(evt);
             }
         });
 
-        password.setText("jPasswordField1");
+        password.setText("");
 
         LOGIN.setText("LOGIN");
         LOGIN.addActionListener(new java.awt.event.ActionListener() {
@@ -1158,10 +1158,22 @@ public class Home extends javax.swing.JFrame {
 
     private void LOGINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LOGINActionPerformed
   
-        String pwd = password.getText(); 
+        char[] pwd = password.getPassword(); 
         String username = useremailid.getText(); 
         
-        if(pwd.contains("one") && (username.contains("king")))
+        char[] samplePassword = {'o', 'n', 'e'};
+        boolean pwdMatch = true;
+        if (pwd.length != samplePassword.length) {
+        	pwdMatch = false;
+        }
+        else {
+	        for (int i = 0; i < pwd.length; i++) {
+	        	if (samplePassword[i] != pwd[i]) {
+	        		pwdMatch = false;
+	        	}
+	        }
+        }
+        if(pwdMatch && (username.contains("king")))
         {
             password.setText(null); 
             useremailid.setText(null); 
@@ -1264,7 +1276,6 @@ public class Home extends javax.swing.JFrame {
     private void fileName(String fileName){
         lblFile = new JLabel(fileName);
         lblFile.setBounds(394, 99, 92, 26);
-        addAnimalPanel.add(lblFile);
     }
     
     public void actionPerformed() {
@@ -1274,8 +1285,7 @@ public class Home extends javax.swing.JFrame {
     
                     a.animalName = AnimalNameText.getText();
                     // new 
-                    user.newAnimal(a.animalName);
-                    user.backUp();
+           
                     a.animalDescription = AnimalDescriptionText.getText();
                     a.deviation = Double.valueOf(StandDeviationText.getText());
                     a.days = Integer.valueOf(NumberOfDaysText.getText());
@@ -1290,7 +1300,8 @@ public class Home extends javax.swing.JFrame {
                     		return;
                     	}
                     }
-                    
+                    user.newAnimal(a.animalName);
+                    user.backUp();
                     Object[] data = {a.animalName, a.animalDescription, a.deviation, a.days, a.duration, a.filePath, a.orangeDev, a.redDev};
                     serialization ser = new serialization(data, animalsPath, a.animalName);
                     ser.SerializeObject();
@@ -1432,19 +1443,23 @@ public class Home extends javax.swing.JFrame {
     // method called when the delete button is clicked
     private void deleteAnimals() {
         DefaultTableModel ChangeModel = (DefaultTableModel)changeIdTable.getModel();
+        DefaultTableModel AddModel = (DefaultTableModel)addAnimalTable.getModel();
+        DefaultTableModel selectionModel = (DefaultTableModel)animalSelectionTable.getModel();
     	for (int i = 0; i < change.animals.size(); i++) {
     		if ((boolean)changeIdTable.getValueAt(i, 5) == true) {
     			
     			// removes from the tables
                 String animalName = (String)ChangeModel.getValueAt(i,0);
                 ChangeModel.removeRow(i);
-    			for(int j = 0 ; i < animalSelectionTable.getRowCount() ;j++){
-    			    if(animalSelectionTable.getModel().getValueAt(i,0) == animalName ){
-
-                    }
+                AddModel.removeRow(i);
+    			for(int j = 0 ; j < animalSelectionTable.getRowCount() ;j++){
+    			    if((String)selectionModel.getValueAt(j, 0) == animalName) {
+    			    	selectionModel.removeRow(j);
+    			    }
                 }
     			//TODO remove the monitor
     			user.removeAnimal(animalName);
+    			user.backUp();
     			
     			String path = animalsPath + "/" + change.animals.get(i).animalName + ".dat";
     			File file = new File(path);
@@ -1455,6 +1470,7 @@ public class Home extends javax.swing.JFrame {
     			i--;
     		}
     	}
+    	animalSelectionTable.repaint();
         addAnimalTable.repaint();
     }
 
