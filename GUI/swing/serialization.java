@@ -15,7 +15,7 @@ public class serialization implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String folderDir;
 	private String fileName;
 	private Object[] obj;
@@ -32,8 +32,10 @@ public class serialization implements java.io.Serializable{
 		 // Serialization 
 		FileOutputStream f_out = null;
 		try {
-			
-			File file = new File(folderDir + dash + fileName + ".dat" ); 
+            File file;
+			if(folderDir == ""){
+                file = new File(fileName + ".dat" );
+            }else file = new File(folderDir + dash + fileName + ".dat" );
 			Files.deleteIfExists(file.toPath());
 			
 			// delete file is exist
@@ -58,7 +60,7 @@ public class serialization implements java.io.Serializable{
 	        return true;
 		}catch(IOException ex) 
         { 
-            System.out.println("IOException is caught"); 
+            System.out.println("serialization: IOException is caught");
             return false;
         } finally {
             // releases all system resources from the streams
@@ -83,7 +85,7 @@ public class serialization implements java.io.Serializable{
 
 		//hide the Log file
 		Files.setAttribute(p, "dos:hidden", true);
-		
+
 		// Opening Read-Only Normal File..
 		Files.setAttribute(p, "dos:readonly", true);
 
