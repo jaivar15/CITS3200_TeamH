@@ -7,6 +7,7 @@ package swing;
 import java.awt.Color;
 import java.io.File;
 
+
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JFrame;
@@ -36,8 +37,8 @@ public class Home extends javax.swing.JFrame {
     private ArrayList<Notifications> recentNotifications;
     private ArrayList<Monitor> monitors;
     
-    private final String animalsPath = "animals";
-    private final String responsderFile = "responder.dat";
+    private final String animalsPath = System.getProperty("user.dir") + "//src//swing//animals";  
+    private final String responsderFile = System.getProperty("user.dir") + "\\src/responder.dat";
     private final double DEFAULT_ORANGE = 1.0;
     private final double DEFAULT_RED = 2.0;
     
