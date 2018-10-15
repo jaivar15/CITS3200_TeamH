@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
+import java.io.IOException;
 import java.util.ArrayList;
 /**
  *
@@ -35,7 +36,8 @@ public class Home extends javax.swing.JFrame {
     private ArrayList<Notifications> recentNotifications;
     private ArrayList<Monitor> monitors;
     
-    private final String animalsPath = "C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals";
+    private final String animalsPath = "animals";
+    private final String responsderFile = "responder.dat";
     private final double DEFAULT_ORANGE = 1.0;
     private final double DEFAULT_RED = 2.0;
     
@@ -74,7 +76,8 @@ public class Home extends javax.swing.JFrame {
 
     
     private void setUpModel(){
-        Object[] ser = user.readBackUpFile("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/responder.dat");
+        Object[] ser;
+        ser = user.readBackUpFile(responsderFile);
         user.recover(ser);
         
         animalSelectionTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -321,6 +324,7 @@ public class Home extends javax.swing.JFrame {
         ChangeIDButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         changeIdTable = new javax.swing.JTable();
+        DeleteID = new javax.swing.JButton();
         settingPanel = new javax.swing.JPanel();
         ApplicationPasswordButton = new javax.swing.JButton();
         OwnerEmailButton = new javax.swing.JButton();
@@ -519,7 +523,7 @@ public class Home extends javax.swing.JFrame {
         MainIconLabel.setText("jLabel1");
 
         searchVarText.setBackground(new java.awt.Color(42, 75, 115));
-        searchVarText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        searchVarText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         searchVarText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchVarTextActionPerformed(evt);
@@ -595,10 +599,10 @@ public class Home extends javax.swing.JFrame {
         usersPanel.setBackground(new java.awt.Color(153, 204, 255));
 
         EmailAccountText.setBackground(new java.awt.Color(42, 75, 115));
-        EmailAccountText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        EmailAccountText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         EmailNameText.setBackground(new java.awt.Color(42, 75, 115));
-        EmailNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        EmailNameText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         EmailNameTextLable.setText("Email Name");
 
@@ -694,19 +698,19 @@ public class Home extends javax.swing.JFrame {
         addAnimalPanel.setBackground(new java.awt.Color(153, 153, 255));
 
         AnimalNameText.setBackground(new java.awt.Color(42, 75, 115));
-        AnimalNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        AnimalNameText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         StandDeviationText.setBackground(new java.awt.Color(42, 75, 115));
-        StandDeviationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        StandDeviationText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         AnimalDescriptionText.setBackground(new java.awt.Color(42, 75, 115));
-        AnimalDescriptionText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        AnimalDescriptionText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         NumberOfDaysText.setBackground(new java.awt.Color(42, 75, 115));
-        NumberOfDaysText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        NumberOfDaysText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         DurationText.setBackground(new java.awt.Color(42, 75, 115));
-        DurationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        DurationText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         StandardDeviationLabel.setText("Deviation");
 
@@ -814,21 +818,21 @@ public class Home extends javax.swing.JFrame {
         ChangeDurationLabel.setText("Duration");
 
         ChangeStandDeviationText.setBackground(new java.awt.Color(42, 75, 115));
-        ChangeStandDeviationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeStandDeviationText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         ChangeAnimalDescriptionText.setBackground(new java.awt.Color(42, 75, 115));
-        ChangeAnimalDescriptionText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeAnimalDescriptionText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         ChangeAnimalNameText.setBackground(new java.awt.Color(42, 75, 115));
-        ChangeAnimalNameText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeAnimalNameText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         ChangeNumberOfDaysText.setBackground(new java.awt.Color(42, 75, 115));
-        ChangeNumberOfDaysText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeNumberOfDaysText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         ChangeAnimalNameLabel.setText("Animal Name ");
 
         ChangeDurationText.setBackground(new java.awt.Color(42, 75, 115));
-        ChangeDurationText.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        ChangeDurationText.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         ChangeAnimalDescriptionLabel.setText("Animal Description ");
 
@@ -857,6 +861,13 @@ public class Home extends javax.swing.JFrame {
         changeIdTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(changeIdTable);
 
+        DeleteID.setText("Delete");
+        DeleteID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteIDActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout changeIDPanelLayout = new javax.swing.GroupLayout(changeIDPanel);
         changeIDPanel.setLayout(changeIDPanelLayout);
         changeIDPanelLayout.setHorizontalGroup(
@@ -878,7 +889,9 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(ChangeAnimalDescriptionText, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ChangeIDButton)
-                .addContainerGap(491, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                    .addComponent(DeleteID)
+                    .addGap(157, 157, 157))
             .addGroup(changeIDPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -910,7 +923,8 @@ public class Home extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(changeIDPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ChangeDurationText, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ChangeIDButton))))
+                            .addComponent(ChangeIDButton)
+                            .addComponent(DeleteID))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                 .addGap(11, 11, 11))
@@ -1203,6 +1217,11 @@ public class Home extends javax.swing.JFrame {
         UserTable.repaint();
     }//GEN-LAST:event_deleteEmailButtonActionPerformed
 
+    private void DeleteIDActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO:
+        deleteAnimals();
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1411,17 +1430,20 @@ public class Home extends javax.swing.JFrame {
     
     // method called when the delete button is clicked
     private void deleteAnimals() {
+        DefaultTableModel ChangeModel = (DefaultTableModel)changeIdTable.getModel();
     	for (int i = 0; i < change.animals.size(); i++) {
     		if ((boolean)changeIdTable.getValueAt(i, 5) == true) {
     			
     			// removes from the tables
-    			((DefaultTableModel)changeIdTable.getModel()).removeRow(i);
-    			changeIdTable.repaint();
-    			((DefaultTableModel)addAnimalTable.getModel()).removeRow(i);
-    			addAnimalTable.repaint();
-    			
+                String animalName = (String)ChangeModel.getValueAt(i,0);
+                ChangeModel.removeRow(i);
+    			for(int j = 0 ; i < animalSelectionTable.getRowCount() ;j++){
+    			    if(animalSelectionTable.getModel().getValueAt(i,0) == animalName ){
+
+                    }
+                }
     			//TODO remove the monitor
-    			//TODO remove from emails
+    			user.removeAnimal(animalName);
     			
     			String path = animalsPath + "/" + change.animals.get(i).animalName + ".dat";
     			File file = new File(path);
@@ -1432,8 +1454,9 @@ public class Home extends javax.swing.JFrame {
     			i--;
     		}
     	}
+        addAnimalTable.repaint();
     }
-        
+
     private void setColor(JPanel pane)
     {
         pane.setBackground(new Color(41,57,80));
@@ -1511,6 +1534,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel btn_5;
     private javax.swing.JPanel changeIDPanel;
     private javax.swing.JTable changeIdTable;
+    private javax.swing.JButton DeleteID;
     private javax.swing.JLabel changeIdTextLabel;
     private javax.swing.JButton deleteEmailButton;
     private javax.swing.JPanel jPanel1;
