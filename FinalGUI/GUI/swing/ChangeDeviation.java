@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI.swing;
+package swing;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -80,7 +80,7 @@ public class ChangeDeviation extends javax.swing.JFrame {
         
         change.readAnimals("C:\\Users\\jarro\\Documents\\Uni\\Computer Science\\Eclipse\\TempGUI\\src/animals");
         AnimalDropdown = new JComboBox();
-        for (Animal a : change.getAnimals().values()) {
+        for (Animal a : change.animals) {
             AnimalDropdown.addItem(a.animalName);
         }
         AnimalDropdown.addActionListener(new ActionListener() {
@@ -185,7 +185,7 @@ public class ChangeDeviation extends javax.swing.JFrame {
     	if (checkFields()) {
     		try {
 		    	int selected = AnimalDropdown.getSelectedIndex();
-		    	Animal a = change.getAnimals().get(selected);
+		    	Animal a = change.animals.get(selected);
 		    	a.deviation = Double.valueOf(greenField.getText());
 		    	a.orangeDev = Double.valueOf(orangeField.getText());
 		    	a.redDev = Double.valueOf(redField.getText());
@@ -195,14 +195,8 @@ public class ChangeDeviation extends javax.swing.JFrame {
 		        ser.SerializeObject();
 		        
 		        if (home != null) {
-		             	Object[][] animalData = new Object[change.numberOfAnimals()][5];
-		             	int dataCounter = 0;
-		             	for (Animal b : change.getAnimals().values()) {
-		             		if (b.equals(a)) {
-		             			home.changeRow(a, dataCounter);
-		             		}
-		             		dataCounter++;
-		             	}
+			        int row = change.animals.indexOf(a);
+			        home.changeRow(a,row);
 		        }
 		        
 		        JOptionPane.showMessageDialog(null, "Changed successfully");
@@ -228,7 +222,7 @@ public class ChangeDeviation extends javax.swing.JFrame {
     
     private void animalSelected() {
     	int selected = AnimalDropdown.getSelectedIndex();
-    	Animal a = change.getAnimals().get(selected);
+    	Animal a = change.animals.get(selected);
     	greenField.setText(Double.toString(a.deviation));
     	orangeField.setText(Double.toString(a.orangeDev));
     	redField.setText(Double.toString(a.redDev));
