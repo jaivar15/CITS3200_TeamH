@@ -3,12 +3,12 @@ package parser;
 import DeviationTest.DataPoint;
 import DeviationTest.AnimalDataSet;
 import GUI.swing.Animal;
+import GUI.swing.responder;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Properties;
-import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import mail.mail;
 
@@ -29,7 +29,9 @@ public class CSVMonitor extends Thread implements Serializable{
 	private AnimalDataSet data;
 	private AtomicBoolean stop = new AtomicBoolean(false);
 	private Boolean initialRead = true;
-
+	private double[] alertLevels = new double[2];
+	private boolean advancedAlerts = false;
+	private LocalDateTime lastDataPointReceived, lastAlertSentAt;
 
 	/**
 	 * Creating this object will monitor an animal's CSV data file and send an email when deviation parameters met
@@ -37,10 +39,18 @@ public class CSVMonitor extends Thread implements Serializable{
 	 * @param a Animal that this monitor object will be watching
 	 */
 	public CSVMonitor(Animal a, int startLine) {
+		lastAlertSentAt = null;
 		animal = a;
 		consecutiveTimeForAlert = (int) animal.getDuration();
 		deviationBeforeAlert = animal.getDeviation();
 		daysToCheck = animal.getDays();
+		//TODO
+		//advancedAlerts = animal.getAdvancedAlerts();
+		if(advancedAlerts){
+			alertLevels[0] = animal.getOrangeDev();
+			alertLevels[1] = animal.getRedDev();
+		}
+		receivingEmails = responder.getEmailsForAnimal(animal.getAnimalName()).toArray(new String[0]);
 		charCount = 0;
 		lineCount = 0;
 		delimiter = ",";
@@ -78,6 +88,16 @@ public class CSVMonitor extends Thread implements Serializable{
 		Animal temp = GUI.swing.change.getAnimal(animal.getAnimalName());
 		if (!animal.equals(temp)){
 			animal = temp;
+			consecutiveTimeForAlert = (int) animal.getDuration();
+			deviationBeforeAlert = animal.getDeviation();
+			daysToCheck = animal.getDays();
+			//TODO
+			//advancedAlerts = animal.getAdvancedAlerts();
+			if(advancedAlerts){
+				alertLevels[0] = animal.getOrangeDev();
+				alertLevels[1] = animal.getRedDev();
+			}
+			receivingEmails = responder.getEmailsForAnimal(animal.getAnimalName()).toArray(new String[0]);
 		}
 	}
 	
@@ -164,7 +184,8 @@ public class CSVMonitor extends Thread implements Serializable{
 						if (timeToAlert == null){
 							timeToAlert = data.getLatestUpdate().getTime().plusHours(consecutiveTimeForAlert);
 						} else if (timeToAlert.compareTo(latest.getTime()) <= 0 ){
-								sendMail();
+							lastAlertSentAt = latest.getTime();
+							sendMail(check[1]);
 						}
 					}
 					if (timeToAlert != null && check[0] == 0){
@@ -186,13 +207,33 @@ public class CSVMonitor extends Thread implements Serializable{
 		sensorID = s;
 	}
 	
+	public String getLastAlertSentAt(){
+		if (lastAlertSentAt != null){
+			return lastAlertSentAt.format(formatter);
+		} else {
+			return "No Alerts Sent";
+		}
+	}
+	
 	/**
 	 * Sends mail
 	 * TODO: Add receiving emails list to this, add way to get sender email and pass.
 	 * TODO: What message to send also.
 	 */
-	public void sendMail(){
+	private void sendMail(double deviation){
 		mail mailer = null;
+		String alertLevel = "ALERT";
+		//senderEmail = getSenderEmail();
+		//senderEmailPass = getSenderEmailPass();
+		if (advancedAlerts){
+			alertLevel = "Yellow Alert";
+			if (deviation > alertLevels[1]){
+				alertLevel = "Orange Alert";
+			}
+			if (deviation > alertLevels[2]){
+				alertLevel = "Red Alert";
+			}
+		}
 		try {
 			mailer = new mail(senderEmail, senderEmailPass, "587", receivingEmails);
 		} catch (Exception e) {
@@ -202,11 +243,15 @@ public class CSVMonitor extends Thread implements Serializable{
 		mailer.initSmtpPort(props);
 		MimeMultipart finals;
 		try {
-			finals = mailer.text("only text in this meeage");
+			finals = mailer.text(alertLevel + ": " + animal.getAnimalName() + "'s temperature has deviated by " + deviation);
 			mailer.sent(props,finals);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Animal getMonitoredAnimal() {
+		return animal;
 	}
 	
 	//Legacy Code
