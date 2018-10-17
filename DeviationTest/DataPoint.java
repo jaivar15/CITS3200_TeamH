@@ -1,3 +1,4 @@
+package deviationTest;
 import java.time.LocalDateTime;
 
 /**
@@ -44,6 +45,11 @@ public double getUnmodifiedTemperature() {
 	return originalTemperature;
 }
 
+/**
+ * A test for data point equivalence
+ * @param secondDataPoint
+ * @return
+ */
 public boolean isEqualTo(DataPoint secondDataPoint) {
 	if((secondDataPoint.getTemperature() == temperature) && (secondDataPoint.getTime().compareTo(time) == 0)) {
 		return true;

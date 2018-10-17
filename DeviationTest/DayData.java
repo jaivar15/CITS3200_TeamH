@@ -1,3 +1,4 @@
+package deviationTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 //import java.time.OffsetDateTime;
@@ -6,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * 
- * DayData is designed to hold a set of DataPoints grouped based on which day they are designated for.
+ * DayData is designed to hold a set of DataPoints grouped based on which day they were recorded for.
  * 
  * @author Kieron Ho
  *
@@ -40,7 +41,7 @@ public class DayData {
 	}
 	
 	/**
-	 * Searches for a datapoint matching a specified time. will small deviations left and right if not initially found
+	 * Searches for a data point matching a specified time. will small deviations left and right if not initially found
 	 * @param soughtTime
 	 * @return the data point at a required time
 	 */

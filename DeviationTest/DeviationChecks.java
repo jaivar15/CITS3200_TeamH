@@ -1,3 +1,4 @@
+package deviationTest;
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 public class DeviationChecks {
 	
 	/**
-	 * 
+	 * Checks the deviation of the latest data point temperature to a historic average
 	 * @param animalData is the set of day data
 	 * @param acceptableDeviation is the amount of deviation acceptable
 	 * @param daysToAverage
@@ -30,6 +31,14 @@ public class DeviationChecks {
 	return returnArray;
 	}
 	
+	/**
+	 * Checks the deviation of a selected data point temperature to a historic average
+	 * @param animalData
+	 * @param acceptableDeviation
+	 * @param daysToAverage
+	 * @param customTime
+	 * @return
+	 */
 	public static double[] checkDeviationCustom(AnimalDataSet animalData, double acceptableDeviation, int daysToAverage, LocalDateTime customTime) {
 		double[] returnArray = new double[2];
 		double currentDeviation = getDeviationFromMean(animalData, daysToAverage, customTime);
@@ -53,6 +62,13 @@ public class DeviationChecks {
 		animalData.getLatestUpdate().setViability(false);
 	}
 	
+	/**
+	 * Finds the amount that a time deviates from the mean of past days
+	 * @param animalData
+	 * @param daysToAverage
+	 * @param customTime
+	 * @return
+	 */
 	public static double getDeviationFromMean(AnimalDataSet animalData, int daysToAverage, LocalDateTime customTime) {
 		if(customTime == null) {
 		HistoricTemperatures pastTemperatures = new HistoricTemperatures(animalData, daysToAverage);

@@ -1,3 +1,4 @@
+package deviationTest;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 
@@ -78,8 +79,6 @@ private double mean;
 		}
 		mean = totalTemp/timesFound;
 	}
-	
-
 	
 	public double[] getHistoricTemperatures() {
 		return historicTemperatures;
