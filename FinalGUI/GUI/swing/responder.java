@@ -155,6 +155,10 @@ public class responder {
         return emailsToAnimalName.get(email).toString()!=null ? emailsToAnimalName.get(email).toString() : null;
     }
     
+    public String[] getEmail(String animalName) {
+    	return (String[])AnimalNameToEmails.get(animalName).toArray();
+    }
+    
     public boolean[] trueOrFalse(String email){
         int size  = animalName.size();
         int i = 0;

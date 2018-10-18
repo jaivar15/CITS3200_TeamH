@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package swing;
+package GUI.swing;
 import java.awt.Color;
 import java.io.File;
 
@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import parser.CSVMonitor;
 /**
  *
  * @author y2434
@@ -33,12 +35,13 @@ public class Home extends javax.swing.JFrame {
     private DefaultTableModel model ;
     private ArrayList<?>[][] animalInfo;
     private int size;
-    private responder user;
+    public responder user;
     private ArrayList<Notifications> recentNotifications;
-    private ArrayList<Monitor> monitors;
+    private HashMap<String, CSVMonitor> monitors;
     
-    private final String animalsPath = System.getProperty("user.dir") + "/src/swing/animals";  
-    private final String responsderFile = System.getProperty("user.dir") + "/src/swing/responder.dat";
+    public final static String animalsPath = System.getProperty("user.dir") + "/animals";  
+    private final String responderFile = System.getProperty("user.dir") + "/responder.dat";
+
     private final double DEFAULT_ORANGE = 1.0;
     private final double DEFAULT_RED = 2.0;
     
@@ -46,13 +49,14 @@ public class Home extends javax.swing.JFrame {
      * Creates new form Home
      */
     public Home() {
+    	System.out.println(animalsPath);
         user = new responder();
         animalInfo = new ArrayList<?>[1][10];
         recentNotifications = new ArrayList<Notifications>();
-        monitors = new ArrayList<Monitor>();
+        monitors = new HashMap<>();
         change.readAnimals(animalsPath);
-        for (Animal a : change.animals) {
-        	monitors.add(new Monitor(a));
+        for (Animal a : change.getAnimals().values()) {
+        	monitors.put(a.getAnimalName(), new CSVMonitor(a, this));
         }
         frame = new JFrame("Display Mode");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,7 +82,7 @@ public class Home extends javax.swing.JFrame {
     
     private void setUpModel(){
         Object[] ser;
-        ser = user.readBackUpFile(responsderFile);
+        ser = user.readBackUpFile(responderFile);
         user.recover(ser);
         
         animalSelectionTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -177,15 +181,17 @@ public class Home extends javax.swing.JFrame {
         });
         
         change.readAnimals(animalsPath);	
-      	int numAnimals = change.animals.size();
+      	int numAnimals = change.getAnimals().size();
       	Object[][] animalData = new Object[numAnimals][6];
-      	for (int i = 0; i < numAnimals; i++) {
-      		animalData[i][0] = change.animals.get(i).animalName;
-      		animalData[i][1] = change.animals.get(i).animalDescription;
-      		animalData[i][2] = change.animals.get(i).deviation;
-      		animalData[i][3] = change.animals.get(i).days;
-      		animalData[i][4] = change.animals.get(i).duration;
+      	int i = 0;
+      	for (Animal a : change.getAnimals().values()) {
+      		animalData[i][0] = a.animalName;
+      		animalData[i][1] = a.animalDescription;
+      		animalData[i][2] = a.deviation;
+      		animalData[i][3] = a.days;
+      		animalData[i][4] = a.duration;
       		animalData[i][5] = false; 
+      		i++;
       	}
         
         addAnimalTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -243,7 +249,7 @@ public class Home extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent event) {
                 int i = animalSelected();
                 if (i >= 0) {
-                	setChangeAnimal(change.animals.get(i));
+                	setChangeAnimal(change.getAnimals().get(i));
                 }
             }
         });
@@ -350,7 +356,7 @@ public class Home extends javax.swing.JFrame {
         HomeTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         HomeTextLabel.setText("Home");
 
-        HomeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Home.png"))); // NOI18N
+        HomeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("Home.png"))); // NOI18N
 
         javax.swing.GroupLayout btn_1Layout = new javax.swing.GroupLayout(btn_1);
         btn_1.setLayout(btn_1Layout);
@@ -413,7 +419,7 @@ public class Home extends javax.swing.JFrame {
         SettingTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         SettingTextLabel.setText("Setting");
 
-        SettingIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Settings.png"))); // NOI18N
+        SettingIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("Settings.png"))); // NOI18N
 
         javax.swing.GroupLayout btn_5Layout = new javax.swing.GroupLayout(btn_5);
         btn_5.setLayout(btn_5Layout);
@@ -444,7 +450,7 @@ public class Home extends javax.swing.JFrame {
         UserTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         UserTextLabel.setText("Users");
 
-        EmailiconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Send_Email.png"))); // NOI18N
+        EmailiconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("Send_Email.png"))); // NOI18N
 
         javax.swing.GroupLayout btn_2Layout = new javax.swing.GroupLayout(btn_2);
         btn_2.setLayout(btn_2Layout);
@@ -475,7 +481,7 @@ public class Home extends javax.swing.JFrame {
         changeIdTextLabel.setForeground(new java.awt.Color(255, 255, 255));
         changeIdTextLabel.setText("Change ID");
 
-        ChangeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Change.png"))); // NOI18N
+        ChangeIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("Change.png"))); // NOI18N
 
         javax.swing.GroupLayout btn_4Layout = new javax.swing.GroupLayout(btn_4);
         btn_4.setLayout(btn_4Layout);
@@ -519,7 +525,7 @@ public class Home extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(41, 83, 129));
 
-        MainIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/Penguin_48px.png"))); // NOI18N
+        MainIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("Penguin_48px.png"))); // NOI18N
         MainIconLabel.setLabelFor(MainIconLabel);
         MainIconLabel.setText("jLabel1");
 
@@ -532,7 +538,7 @@ public class Home extends javax.swing.JFrame {
         });
 
         SearchIconLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        SearchIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/swing/image/searchs.png"))); // NOI18N
+        SearchIconLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("searchs.png"))); // NOI18N
         SearchIconLabel.setToolTipText("");
 
         UWATextLabel.setFont(new java.awt.Font("Segoe UI Symbol", 0, 24)); // NOI18N
@@ -1294,7 +1300,7 @@ public class Home extends javax.swing.JFrame {
                     a.orangeDev = a.deviation + DEFAULT_ORANGE;
                     a.redDev = a.deviation + DEFAULT_RED;
 
-                    for (Animal animal : change.animals) {
+                    for (Animal animal : change.getAnimals().values()) {
                     	if (animal.animalName.equals(a.animalName)) {
                     		 JOptionPane.showMessageDialog(null, "Please give the animal a unique name");
                     		return;
@@ -1306,7 +1312,7 @@ public class Home extends javax.swing.JFrame {
                     serialization ser = new serialization(data, animalsPath, a.animalName);
                     ser.SerializeObject();
                     
-                    monitors.add(new Monitor(a));
+                    monitors.put(a.animalName, new CSVMonitor(a, this));
                     addRow(a);
                   
 
@@ -1324,7 +1330,8 @@ public class Home extends javax.swing.JFrame {
     	if (checkInput2()) {
             try {
             	int i = animalSelected();
-            	Animal a = change.animals.get(i);
+            	String name = (String)changeIdTable.getValueAt(i, 0);
+            	Animal a = change.getAnimals().get(name);
 
                 a.animalName = ChangeAnimalNameText.getText();
                 a.animalDescription = ChangeAnimalDescriptionText.getText();
@@ -1374,6 +1381,25 @@ public class Home extends javax.swing.JFrame {
             });
         animalSelectionTable.repaint();
         
+    }
+    
+    public void addNotification(Notifications n) {
+    	Object[] data = new Object[3];
+    	data[0] = n.animalID;
+    	data[1] = n.animalDescription;
+    	data[2] = n.alertLevel;
+    	
+    	recentNotifications.add(n);
+    	
+    	 DefaultTableModel model = (DefaultTableModel) HomeTable.getModel();
+    	 model.insertRow(0, data);
+    	 
+     	if (recentNotifications.size() > 10) {
+    		recentNotifications.remove(0);
+    		model.removeRow(model.getRowCount()-1);
+    	}
+         HomeTable.repaint();
+    	
     }
     
     public void changeRow(Animal a, int row) {
@@ -1445,7 +1471,7 @@ public class Home extends javax.swing.JFrame {
         DefaultTableModel ChangeModel = (DefaultTableModel)changeIdTable.getModel();
         DefaultTableModel AddModel = (DefaultTableModel)addAnimalTable.getModel();
         DefaultTableModel selectionModel = (DefaultTableModel)animalSelectionTable.getModel();
-    	for (int i = 0; i < change.animals.size(); i++) {
+    	for (int i = 0; i < change.getAnimals().size(); i++) {
     		if ((boolean)changeIdTable.getValueAt(i, 5) == true) {
     			
     			// removes from the tables
@@ -1461,11 +1487,12 @@ public class Home extends javax.swing.JFrame {
     			user.removeAnimal(animalName);
     			user.backUp();
     			
-    			String path = animalsPath + "/" + change.animals.get(i).animalName + ".dat";
+    		
+    			String path = animalsPath + "/" + animalName + ".dat";
     			File file = new File(path);
     			file.delete();
     			
-    			change.animals.remove(i);
+    			change.getAnimals().remove(i);
     			
     			i--;
     		}
