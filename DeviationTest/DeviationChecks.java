@@ -1,6 +1,8 @@
 package deviationTest;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * 
@@ -29,8 +31,7 @@ public class DeviationChecks {
 		boolean advancedNotifications = (acceptableDeviationMultiplier.length > 1);
 		double[] returnArray = new double[2];
 		double currentDeviation = getDeviationFromMean(animalData, daysToAverage, null);
-		HistoricTemperatures pastTemperatures = new HistoricTemperatures(animalData, daysToAverage);
-		double standardDev = findStandardDeviation(pastTemperatures.getHistoricTemperatures());
+		double standardDev = findStandardDeviation(animalData, daysToAverage, animalData.getLatestUpdate().getTime());
 
 		if (!advancedNotifications) {
 			if (currentDeviation >= acceptableDeviationMultiplier[0] * standardDev) {
@@ -70,8 +71,7 @@ public class DeviationChecks {
 		boolean advancedNotifications = (acceptableDeviationMultiplier.length > 1);
 		double[] returnArray = new double[2];
 		double currentDeviation = getDeviationFromMean(animalData, daysToAverage, customTime);
-		HistoricTemperatures pastTemperatures = new HistoricTemperatures(animalData, daysToAverage, customTime);
-		double standardDev = findStandardDeviation(pastTemperatures.getHistoricTemperatures());
+		double standardDev = findStandardDeviation(animalData, daysToAverage, customTime);//////////////////////////////////////
 
 		if (!advancedNotifications) {
 			if (currentDeviation >= acceptableDeviationMultiplier[0] * standardDev) {
@@ -95,20 +95,63 @@ public class DeviationChecks {
 		return returnArray;
 	}
 
-	public static double findStandardDeviation(double[] temperatures) {
+	/**
+	 * Finds a running average standard deviation for all times within the daysToAverage bracket
+	 * @param animalData
+	 * @param daysToAverageDoubled
+	 * @param time
+	 * @return
+	 */
+	public static double findStandardDeviation(AnimalDataSet animalData, int daysToAverageDoubled, LocalDateTime time) {
+		int daysToAverage = daysToAverageDoubled/2;
 		double standardDeviation = 0;
-		double mean = 0;
 		double variance = 0;
-		for (double temperature : temperatures) {
-			mean += temperature;
+		int dataPointCount = 0;
+		DayData[] days = new DayData[daysToAverage];
+		
+		for(int i = 0 ; i < days.length ; i++) {
+			if(animalData.getIndividualDayData(time.toLocalDate().minusDays(1 + i)) != null) {
+				days[i] = animalData.getIndividualDayData(time.toLocalDate().minusDays(1 + i));
+			}
 		}
-		mean = mean / (double) temperatures.length;
-
-		for (double temperature : temperatures) {
-			variance += Math.pow((Math.abs(mean - temperature)), 2);
+		
+		LocalDateTime[] allStandardDevTimes;
+		
+		for(DayData dayData:days) {//find how many datapoints to include in the analysis
+			if(dayData != null) {
+			dataPointCount += dayData.getFullDayDataHashMap().size();
+			}
 		}
+		
+		allStandardDevTimes = new LocalDateTime[dataPointCount];
+		
+		int position = 0;
+		for(DayData dayData:days) {//get all the times to be used for the standard deviation
+			if(dayData != null) {
+			Iterator<LocalDateTime> dayIterator = dayData.getFullDayDataHashMap().keySet().iterator();
+			while(dayIterator.hasNext()) {
+				allStandardDevTimes[position] = dayIterator.next();
+				position++;
+			}
+			}
+		}
+		
+		for(LocalDateTime pointTime : allStandardDevTimes) {//iterate through all times
+			HistoricTemperatures historicTemperatures = new HistoricTemperatures(animalData, daysToAverage, pointTime);//for each time make historic temperature to get mean
+			double[] temperatures = historicTemperatures.getHistoricTemperatures();//get an array of all the historic temperatures
+			if(temperatures.length <2) continue;
+			double mean = historicTemperatures.getMean();//get the mean for these temperatures
 
-		standardDeviation = Math.sqrt(variance / (double) temperatures.length);
+			double temporaryTotalVariance = 0;
+		for (double temperature : temperatures) {//for each temperature
+			temporaryTotalVariance += Math.pow((mean - temperature), 2);//add to variance the difference squared
+		}
+		variance += temporaryTotalVariance/temperatures.length;//add to the total variance the historic temperatures
+		}
+		
+		
+		
+		standardDeviation = Math.sqrt(variance / (double) dataPointCount);//get the average variance for all temperatures and find the square root
 		return standardDeviation;
 	}
 
