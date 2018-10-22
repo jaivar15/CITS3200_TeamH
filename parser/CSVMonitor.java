@@ -193,16 +193,23 @@ public class CSVMonitor extends Thread{
 
 					latest = data.getLatestUpdate();
 					double[] check = checkDeviationLatest(data, deviationBeforeAlert, daysToCheck);
+					int maxAlert = 0;
 					if (check[0] == 1){
+						if (maxAlert < check[1]){
+							maxAlert = (int) check[1];
+						}
 						if (timeToAlert == null){
 							timeToAlert = data.getLatestUpdate().getTime().plusHours(consecutiveTimeForAlert);
 						} else if (timeToAlert.compareTo(latest.getTime()) <= 0 ){
 							lastAlertSentAt = latest.getTime();
-							sendMail((int) check[1]);
+							sendMail(maxAlert);
+							timeToAlert = null;
+							maxAlert = 0;
 						}
 					}
 					if (timeToAlert != null && check[0] == 0){
 						timeToAlert = null;
+						maxAlert = 0;
 					}
 				}
 			try {
